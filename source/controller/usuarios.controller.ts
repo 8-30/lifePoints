@@ -1,8 +1,11 @@
 import {Request, Response} from 'express'
+import Persona from '../models/usuario.model';
 
-export const getUsuarios = ( req: Request, res: Response ) =>{
+export const getUsuarios = async ( req: Request, res: Response ) =>{
+    
+    const usuarios =await Persona.findAll();
     res.json({
-        msg:'getUsuarios'
+      usuarios
     })
 }
 

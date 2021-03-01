@@ -1,6 +1,7 @@
 import express,{Application} from 'express';
 import userRoutes from '../routes/usuarios.routes';
 import cors from 'cors';
+import db from '../database/connection';
 class Server {
 
     private app: Application;
@@ -14,8 +15,20 @@ class Server {
         this.app = express();
         this.port = process.env.PORT || "8000";
         //Metodos iniciales
+        this.dbConnection();
         this.middlewares();
         this.routes();
+    }
+
+    async dbConnection(){
+        try {
+            await db.authenticate();
+            console.log(__dirname);
+            console.log("Database Connect successs!!");
+        } catch (error) {
+            console.log("Database  Failed!!");
+            throw new Error(error);
+        }
     }
 
     middlewares(){
@@ -35,7 +48,7 @@ class Server {
 
     listen(){
         this.app.listen(this.port,() =>{
-            console.log('Servidor corriendo en puerto' + this.port);
+            console.log('Servidor corriendo en puerto : ' + this.port);
         })
     }
 }
