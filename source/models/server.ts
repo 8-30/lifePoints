@@ -1,5 +1,5 @@
 import express,{Application} from 'express';
-import userRoutes from '../routes/usuarios.routs';
+import userRoutes from '../routes/usuarios.routes';
 import cors from 'cors';
 class Server {
 
