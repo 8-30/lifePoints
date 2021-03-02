@@ -2,7 +2,7 @@ import { Model, Table, Column, AllowNull, NotEmpty, PrimaryKey, AutoIncrement } 
 
 export interface InsumoI{
     idInsumo ?: number | null;
-    idInsumosEmpleado  ?: number | null;
+    idInsumoEmpleado  ?: number | null;
     nombre: string;
     tarifa: number;
     descripcion: string;
@@ -10,7 +10,7 @@ export interface InsumoI{
 
 @Table(
     {
-        tableName: "insumos",
+        tableName: "insumo",
         timestamps: true
     }
 )
@@ -24,7 +24,7 @@ class Insumo extends Model implements InsumoI{
     
 
     @Column
-    idInsumosEmpleado ?: number
+    idInsumoEmpleado ?: number
 
     @AllowNull(false)
     @NotEmpty
