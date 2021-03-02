@@ -1,5 +1,5 @@
 import express,{Application} from 'express';
-import userRoutes from '../routes/usuarios.routes';
+import userRoutes from '../routes/persona.routes';
 import cors from 'cors';
 import db from '../database/connection';
 class Server {
@@ -7,7 +7,7 @@ class Server {
     private app: Application;
     private port: string;
     private apiPaths = {
-        usuarios: '/api/usuarios'
+        usuarios: '/api/persona'
     }
 
 
