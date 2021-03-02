@@ -1,5 +1,8 @@
 import express,{Application} from 'express';
 import userRoutes from '../routes/usuarios.routes';
+import adminRoutes from '../routes/administrador.routes';
+import empleRoutes from '../routes/empleado.routes';
+import insuRoutes from '../routes/insumo.routes';
 import cors from 'cors';
 import db from '../database/connection';
 class Server {
@@ -7,7 +10,10 @@ class Server {
     private app: Application;
     private port: string;
     private apiPaths = {
-        usuarios: '/api/usuarios'
+        usuarios: '/api/usuarios',
+        administrador:'/api/administradores',
+        empleado:'/api/empleados',
+        insumo:'/api/insumos'
     }
 
 
@@ -23,10 +29,9 @@ class Server {
     async dbConnection(){
         try {
             await db.authenticate();
-            console.log(__dirname);
             console.log("Database Connect successs!!");
         } catch (error) {
-            console.log("Database  Failed!!");
+            console.log("Database Failed!!");
             throw new Error(error);
         }
     }
@@ -42,6 +47,9 @@ class Server {
 
     routes(){
         this.app.use( this.apiPaths.usuarios, userRoutes)
+        this.app.use( this.apiPaths.administrador, adminRoutes)
+        this.app.use( this.apiPaths.empleado,empleRoutes )
+        this.app.use( this.apiPaths.insumo,insuRoutes )
     }
 
 
