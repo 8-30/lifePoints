@@ -1,8 +1,10 @@
 import express,{Application} from 'express';
-import userRoutes from '../routes/usuarios.routes';
 import adminRoutes from '../routes/administrador.routes';
 import empleRoutes from '../routes/empleado.routes';
 import insuRoutes from '../routes/insumo.routes';
+import personaRoutes from '../routes/persona.routes';
+import usuarioRoutes  from '../routes/usuario.routes';
+import ordenRoutes  from '../routes/orden.routes';
 import cors from 'cors';
 import db from '../database/connection';
 class Server {
@@ -10,10 +12,12 @@ class Server {
     private app: Application;
     private port: string;
     private apiPaths = {
-        usuarios: '/api/usuarios',
         administrador:'/api/administradores',
         empleado:'/api/empleados',
-        insumo:'/api/insumos'
+        insumo:'/api/insumos',
+        persona: '/api/persona',
+        usuario: '/api/usuario',
+        orden: '/api/orden'
     }
 
 
@@ -46,10 +50,12 @@ class Server {
     }
 
     routes(){
-        this.app.use( this.apiPaths.usuarios, userRoutes)
         this.app.use( this.apiPaths.administrador, adminRoutes)
         this.app.use( this.apiPaths.empleado,empleRoutes )
         this.app.use( this.apiPaths.insumo,insuRoutes )
+        this.app.use( this.apiPaths.persona, personaRoutes)
+        this.app.use( this.apiPaths.usuario, usuarioRoutes)
+        this.app.use( this.apiPaths.orden, ordenRoutes)
     }
 
 
