@@ -1,5 +1,7 @@
 import express,{Application} from 'express';
-import userRoutes from '../routes/persona.routes';
+import personaRoutes from '../routes/persona.routes';
+import usuarioRoutes  from '../routes/usuario.routes';
+import ordenRoutes  from '../routes/orden.routes';
 import cors from 'cors';
 import db from '../database/connection';
 class Server {
@@ -7,7 +9,9 @@ class Server {
     private app: Application;
     private port: string;
     private apiPaths = {
-        usuarios: '/api/persona'
+        persona: '/api/persona',
+        usuario: '/api/usuario',
+        orden: '/api/orden'
     }
 
 
@@ -41,7 +45,9 @@ class Server {
     }
 
     routes(){
-        this.app.use( this.apiPaths.usuarios, userRoutes)
+        this.app.use( this.apiPaths.persona, personaRoutes)
+        this.app.use( this.apiPaths.usuario, usuarioRoutes)
+        this.app.use( this.apiPaths.orden, ordenRoutes)
     }
 
 

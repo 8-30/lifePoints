@@ -5,6 +5,7 @@ export const getpersonas = async ( req: Request, res: Response ) =>{
     
     const personas =await Persona.findAll();
     res.json({
+      msg: 'personas',
       personas
     })
 }
