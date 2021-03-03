@@ -10,45 +10,69 @@ export const getAdministradores = async ( req: Request, res: Response ) =>{
     })
 }
 
-export const getAdministrador = ( req: Request, res: Response ) =>{
+export const getAdministrador = async ( req: Request, res: Response ) =>{
     
-    const { id } = req.params;
+    const {id}= req.params;
+    const administrador = await Administrador.findByPk(id);
+    if(administrador){
+        res.json({
+            administrador
+        });
+    }else{
+        res.status(404).json({
+            msg:`no existe ningun usuario con el ide ${id}`
+        });
+    }
 
-    res.json({
-        msg:'getAdministrador',
-        id
-    })
 }
 
-export const postAdministrador = ( req: Request, res: Response ) =>{
+export const postAdministrador = async ( req: Request, res: Response ) =>{
     
+    const {body}= req;
+    try {
+        ///const administrador = Administrador.create(body);
+        const administrador = new Administrador(body);
+        administrador.save();
+        res.json(administrador);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg:'Hable con el administrador',
+        });
+    }
+}
+
+export const putAdministrador = async  ( req: Request, res: Response ) =>{
+
+    const { id } = req.params;
     const { body } = req;
-
-    res.json({
-        msg:'postUsuarios',
-        body
-    })
+    try {
+        const admintrador = Administrador.findByPk(id);
+        if(!admintrador){
+            return res.status(404).json({
+                msg: `no existe ningun usuario con el ide ${id}`,
+            });
+        }
+        await admintrador.then((value)=>value?.update(body));
+        res.json(admintrador);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg:'Hable con el administrador',
+        });
+    }
 }
 
-export const putAdministrador = ( req: Request, res: Response ) =>{
-
-    const { id } = req.params;
-    const { body } = req;
-
-    res.json({
-        msg:'putUsuarios',
-        id,
-        body
-    })
-}
-
-export const deleteAdministrador = ( req: Request, res: Response ) =>{
+export const deleteAdministrador = async( req: Request, res: Response ) =>{
     
     const { id } = req.params;
 
-
-    res.json({
-        msg:'deleteUsuarios',
-        id
-    })
+    const administrador =await Administrador.findByPk(id);
+    if(administrador){
+        res.json({
+            administrador
+        });
+    }
+    await administrador?.destroy();
+    res.json(administrador);
 }
