@@ -31,7 +31,6 @@ export const postInsumo = async( req: Request, res: Response ) =>{
     const { body } = req;
 
     try {
-        ///const administrador = Administrador.create(body);
         const insumo = new Insumo(body);
         insumo.save();
         res.json(insumo);
@@ -49,14 +48,13 @@ export const putInsumo = async( req: Request, res: Response ) =>{
     const { body } = req;
 
     try {
-        const insumo = Insumo.findByPk(id);
+        const insumo = await Insumo.findByPk(id);
         if(!insumo){
-           
             return res.status(404).json({
-                msg: `no existe ningun insumo con el ide ${id}`,
+                msg: `no existe ningun insumo con el id ${id}`,
             });
         }
-        await insumo.then((value)=>value?.update(body));
+        await insumo.update(body);
         res.json(insumo);
     } catch (error) {
         console.log(error);

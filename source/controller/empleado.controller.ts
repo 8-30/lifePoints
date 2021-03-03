@@ -46,13 +46,13 @@ export const putEmpleado = async ( req: Request, res: Response ) =>{
     const { id } = req.params;
     const { body } = req;
     try {
-        const empleado = Empleado.findByPk(id);
+        const empleado = await Empleado.findByPk(id);
         if(!empleado){
             return res.status(404).json({
-                msg: `no existe ningun empleado con el ide ${id}`,
+                msg: `no existe ningun empleado con el id ${id}`,
             });
         }
-        await empleado.then((value)=>value?.update(body));
+        await empleado.update(body);
         res.json(empleado);
     } catch (error) {
         console.log(error);

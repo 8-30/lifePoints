@@ -30,7 +30,6 @@ export const postAdministrador = async ( req: Request, res: Response ) =>{
     
     const {body}= req;
     try {
-        ///const administrador = Administrador.create(body);
         const administrador = new Administrador(body);
         administrador.save();
         res.json(administrador);
@@ -47,13 +46,13 @@ export const putAdministrador = async  ( req: Request, res: Response ) =>{
     const { id } = req.params;
     const { body } = req;
     try {
-        const admintrador = Administrador.findByPk(id);
+        const admintrador =await Administrador.findByPk(id);
         if(!admintrador){
             return res.status(404).json({
-                msg: `no existe ningun usuario con el ide ${id}`,
+                msg: `no existe ningun usuario con el id ${id}`,
             });
         }
-        await admintrador.then((value)=>value?.update(body));
+        await admintrador.update(body);
         res.json(admintrador);
     } catch (error) {
         console.log(error);
