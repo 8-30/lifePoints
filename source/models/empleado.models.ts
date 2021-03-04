@@ -1,4 +1,5 @@
 import { Model, Table, Column, AllowNull, NotEmpty, PrimaryKey } from "sequelize-typescript";
+import Persona, { PersonaI } from "./persona.model";
 
 export interface EmpleadoI{
     idEmpleado ?: number | null;
@@ -6,6 +7,7 @@ export interface EmpleadoI{
     tarifa: number;
     calificacion: number;
     descripcion: string;
+    persona: Persona,
 }
 
 @Table(
@@ -39,6 +41,8 @@ class Empleado extends Model implements EmpleadoI{
     @NotEmpty
     @Column
     descripcion!: string;
+
+    persona!: Persona;
 
 }
 export default Empleado;

@@ -1,20 +1,29 @@
 
 import {Request, Response} from 'express'
 import Empleado from '../models/empleado.models';
+import Persona from '../models/persona.model';
 
 export const getEmpleados = async ( req: Request, res: Response ) =>{
     
-    const empleado =await Empleado.findAll();
+    const empleados =await Empleado.findAll();
+   
+   //for para recorrer todos los empleados
+    for(const empleado of empleados ){
+        //llamamos a la funcion para vincular a los empleados con su informacion de personas
+        await obtenerInformacionEmpleado(empleado);    
+    };
     res.json({
-        empleado
+        empleados
     })
 }
+
 
 export const getEmpleado = async ( req: Request, res: Response ) =>{
     
     const { id } = req.params;
     const empleado = await Empleado.findByPk(id);
     if(empleado){
+        await obtenerInformacionEmpleado(empleado)
         res.json({
             empleado
         });
@@ -32,8 +41,15 @@ export const postEmpleado = async ( req: Request, res: Response ) =>{
     try {
         ///const administrador = Administrador.create(body);
         const empleado = new Empleado(body);
+        //para guardar peromero la persona
+        const persona = new Persona(body);
+        persona.save();
+        
         empleado.save();
-        res.json(empleado);
+        res.json({
+            empleado,
+            persona
+        });
     } catch (error) {
         res.status(500).json({
             msg:'Hable con el administrador',
@@ -74,4 +90,18 @@ export const deleteEmpleado = async( req: Request, res: Response ) =>{
     }
     await empleado?.destroy();
     res.json(empleado);
+}
+//funciones
+async function obtenerInformacionEmpleado(empleado:Empleado){
+    //buscamos a la persona que tenga el mismo id que el empleado
+    const persona = await Persona.findOne({
+        where: {
+            idPersona : empleado.idEmpleado,
+        }
+    });
+    //Se asigna la informacion de persona al empleado
+    //(se pone el if para que no salga error porque siempre va a existir 1 persona por 1 empleado pero la wea no reconoce y sale error)
+    if (persona){
+        empleado.setDataValue("persona",persona)
+    } 
 }
