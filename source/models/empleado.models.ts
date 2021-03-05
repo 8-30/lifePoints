@@ -1,5 +1,5 @@
 import { Model, Table, Column, AllowNull, NotEmpty, PrimaryKey } from "sequelize-typescript";
-import Persona, { PersonaI } from "./persona.model";
+import Persona from "./persona.model";
 
 export interface EmpleadoI{
     idEmpleado ?: number | null;
@@ -7,7 +7,7 @@ export interface EmpleadoI{
     tarifa: number;
     calificacion: number;
     descripcion: string;
-    persona: Persona,
+    persona: Persona
 }
 
 @Table(

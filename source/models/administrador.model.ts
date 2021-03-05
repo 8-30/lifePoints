@@ -1,9 +1,11 @@
 import { Model, Table, Column, AllowNull, NotEmpty, PrimaryKey } from "sequelize-typescript";
+import Persona from "./persona.model";
 
 export interface AdministradorI{
     idAdministrador ?: number | null;
     usuario: string;
     contrasena: string;
+    persona: Persona
    
 }
 
@@ -29,6 +31,8 @@ class Administrador extends Model implements AdministradorI{
     @NotEmpty
     @Column
     contrasena!: string;
+
+    persona!: Persona;
 
 }
 export default Administrador;

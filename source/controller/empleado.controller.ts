@@ -40,11 +40,12 @@ export const postEmpleado = async ( req: Request, res: Response ) =>{
 
     try {
         ///const administrador = Administrador.create(body);
+        //para guardar peromero los datos de persona persona
+        const persona =new Persona(body);
+        await persona.save();
+        // creamos empleado y asignamos el id de persona guardado anteriormente
         const empleado = new Empleado(body);
-        //para guardar peromero la persona
-        const persona = new Persona(body);
-        persona.save();
-        
+        empleado.setDataValue("idEmpleado", persona.idPersona)
         empleado.save();
         res.json({
             empleado,
@@ -69,7 +70,13 @@ export const putEmpleado = async ( req: Request, res: Response ) =>{
             });
         }
         await empleado.update(body);
-        res.json(empleado);
+         // buscamos a la persona con el mismo id de empleado y la actualizamos
+        const persona = await Persona.findByPk(id);
+        await persona?.update(body);
+        res.json({
+            empleado,
+            persona
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -79,18 +86,33 @@ export const putEmpleado = async ( req: Request, res: Response ) =>{
 }
 
 export const deleteEmpleado = async( req: Request, res: Response ) =>{
-    
-    const { id } = req.params;
 
-    const empleado =await Empleado.findByPk(id);
-    if(empleado){
+    const { id } = req.params;
+    try{
+        const empleado =await Empleado.findByPk(id);
+        if(!empleado){
+            return res.status(404).json({
+                msg:`No existe un empleado con el id ${id}`
+            })
+        }
+        await empleado.destroy();
+        // buscamos a la persona con el mismo id de empleado y la actualizamos
+        const persona = await Persona.findByPk(id);
+        await persona?.destroy();
         res.json({
-            empleado
+            empleado,
+            persona
         });
+    }catch(error){
+        console.log(error);
+        res.status(500).json({
+            msg:'Hable con el administrador',
+        })
+
     }
-    await empleado?.destroy();
-    res.json(empleado);
+    
 }
+
 //funciones
 async function obtenerInformacionEmpleado(empleado:Empleado){
     //buscamos a la persona que tenga el mismo id que el empleado
@@ -105,3 +127,4 @@ async function obtenerInformacionEmpleado(empleado:Empleado){
         empleado.setDataValue("persona",persona)
     } 
 }
+

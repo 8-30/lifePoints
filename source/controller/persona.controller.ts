@@ -68,7 +68,6 @@ export const putpersona = async( req: Request, res: Response ) =>{
 export const deletepersona = async( req: Request, res: Response ) =>{
     
     const { id } = req.params;
-    const { body } = req;
     try{
         const persona = await Persona.findByPk(id);
         if(!persona){
@@ -76,7 +75,7 @@ export const deletepersona = async( req: Request, res: Response ) =>{
                 msg:`No existe una persona con el id ${id}`
             })
         }
-        await persona.destroy(body);
+        await persona.destroy();
         res.json(persona);
     }catch(error){
         console.log(error);
