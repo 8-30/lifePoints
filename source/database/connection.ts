@@ -6,8 +6,8 @@ import Orden from "../models/orden.model";
 import Persona from "../models/persona.model";
 import Usuario from "../models/usuario.model";
 
-const db = new Sequelize('lifepoints', 'root', '', {
-    host: 'localhost',
+const db = new Sequelize('SyrrRfsQBR', 'SyrrRfsQBR', 'crqqqER3ZK', {
+    host: 'remotemysql.com',
     dialect: 'mysql',
     models: [Persona,Administrador,Empleado,Insumo, Usuario, Orden] 
 });
