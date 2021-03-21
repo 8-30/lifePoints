@@ -21,7 +21,25 @@ export const getInsumo =async ( req: Request, res: Response ) =>{
         });
     }else{
         res.status(404).json({
-            msg:`no existe ningun usuario con el ide ${id}`
+            msg:`no existe ningun insumo con el id ${id}`
+        });
+    }
+}
+export const getInsumoEmpleado =async ( req: Request, res: Response ) =>{
+    
+    const { id } = req.params;
+    const insumos =await Insumo.findAll({
+        where:{
+            idInsumoEmpleado:id
+        }
+    });
+    if(insumos){
+        res.json({
+            insumos
+        });
+    }else{
+        res.status(404).json({
+            msg:`no existe ningun empleado con el id ${id}`
         });
     }
 }

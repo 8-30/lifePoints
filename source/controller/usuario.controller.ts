@@ -1,80 +1,108 @@
+
 import {Request, Response} from 'express'
 import Usuario from '../models/usuario.model';
+import Persona from '../models/persona.model';
 
-export const getusuarios = async ( req: Request, res: Response ) =>{
+export const getUsuarios = async ( req: Request, res: Response ) =>{
     
     const usuarios =await Usuario.findAll();
+   
+   //for para recorrer todos los usuarios
+    for(const usuario of usuarios ){
+        //llamamos a la funcion para vincular a los usuarios con su informacion de personas
+        await obtenerInformacionUsuario(usuario);    
+    };
     res.json({
-        msg:'usuarios',
         usuarios
     })
 }
 
-export const getusuario = async( req: Request, res: Response ) =>{
+
+export const getUsuario = async ( req: Request, res: Response ) =>{
+    
     const { id } = req.params;
-    const usuario =await Usuario.findByPk(id);
-    if (usuario){
-        res.json(usuario)
+    const usuario = await Usuario.findByPk(id);
+    if(usuario){
+        await obtenerInformacionUsuario(usuario)
+        res.json({
+            usuario
+        });
     }else{
         res.status(404).json({
-            msg: `No existe una usuario con el id ${id}`
+            msg:`no existe ningun usuario con el ide ${id}`
         });
     }
-    
 }
 
-export const postusuario = async( req: Request, res: Response ) =>{
+export const postUsuario = async ( req: Request, res: Response ) =>{
+    
     const { body } = req;
-    try{
-        const usuario = new Usuario(body);
-        await usuario.save();
-        res.json(usuario);
 
-    }catch(error){
-        console.log(error);
+    try {
+        ///const administrador = Administrador.create(body);
+        //para guardar peromero los datos de persona persona
+        const persona =new Persona(body);
+        await persona.save();
+        // creamos usuario y asignamos el id de persona guardado anteriormente
+        const usuario = new Usuario(body);
+        usuario.setDataValue("idUsuario", persona.idPersona)
+        usuario.save();
+        res.json({
+            usuario,
+            persona
+        });
+    } catch (error) {
         res.status(500).json({
             msg:'Hable con el administrador',
-        })
-
+        });
     }
 }
 
-export const putusuario = async( req: Request, res: Response ) =>{
+export const putUsuario = async ( req: Request, res: Response ) =>{
 
     const { id } = req.params;
     const { body } = req;
-    try{
+    try {
         const usuario = await Usuario.findByPk(id);
         if(!usuario){
             return res.status(404).json({
-                msg:`No existe una usuario con el id ${id}`
-            })
+                msg: `no existe ningun usuario con el id ${id}`,
+            });
         }
         await usuario.update(body);
-        res.json(usuario);
-
-    }catch(error){
+         // buscamos a la persona con el mismo id de usuario y la actualizamos
+        const persona = await Persona.findByPk(id);
+        await persona?.update(body);
+        res.json({
+            usuario,
+            persona
+        });
+    } catch (error) {
         console.log(error);
         res.status(500).json({
             msg:'Hable con el administrador',
-        })
-
+        });
     }
 }
 
-export const deleteusuario = async( req: Request, res: Response ) =>{
-    
+export const deleteUsuario = async( req: Request, res: Response ) =>{
+
     const { id } = req.params;
-    const { body } = req;
     try{
-        const usuario = await Usuario.findByPk(id);
+        const usuario =await Usuario.findByPk(id);
         if(!usuario){
             return res.status(404).json({
-                msg:`No existe una usuario con el id ${id}`
+                msg:`No existe un usuario con el id ${id}`
             })
         }
-        await usuario.destroy(body);
-        res.json(usuario);
+        await usuario.destroy();
+        // buscamos a la persona con el mismo id de usuario y la actualizamos
+        const persona = await Persona.findByPk(id);
+        await persona?.destroy();
+        res.json({
+            usuario,
+            persona
+        });
     }catch(error){
         console.log(error);
         res.status(500).json({
@@ -82,4 +110,21 @@ export const deleteusuario = async( req: Request, res: Response ) =>{
         })
 
     }
+    
 }
+
+//funciones
+async function obtenerInformacionUsuario(usuario:Usuario){
+    //buscamos a la persona que tenga el mismo id que el usuario
+    const persona = await Persona.findOne({
+        where: {
+            idPersona : usuario.idUsuario,
+        }
+    });
+    //Se asigna la informacion de persona al usuario
+    //(se pone el if para que no salga error porque siempre va a existir 1 persona por 1 usuario pero la wea no reconoce y sale error)
+    if (persona){
+        usuario.setDataValue("persona",persona)
+    } 
+}
+
