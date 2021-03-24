@@ -6,14 +6,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
 const administrador_model_1 = __importDefault(require("../models/administrador.model"));
 const empleado_models_1 = __importDefault(require("../models/empleado.models"));
+const inbox_model_1 = __importDefault(require("../models/inbox.model"));
 const insumo_models_1 = __importDefault(require("../models/insumo.models"));
+const mensaje_model_1 = __importDefault(require("../models/mensaje.model"));
 const orden_model_1 = __importDefault(require("../models/orden.model"));
 const persona_model_1 = __importDefault(require("../models/persona.model"));
 const usuario_model_1 = __importDefault(require("../models/usuario.model"));
 const db = new sequelize_typescript_1.Sequelize('SyrrRfsQBR', 'SyrrRfsQBR', 'crqqqER3ZK', {
     host: 'remotemysql.com',
     dialect: 'mysql',
-    models: [persona_model_1.default, administrador_model_1.default, empleado_models_1.default, insumo_models_1.default, usuario_model_1.default, orden_model_1.default]
+    models: [persona_model_1.default, administrador_model_1.default, empleado_models_1.default, insumo_models_1.default, usuario_model_1.default, orden_model_1.default, mensaje_model_1.default, inbox_model_1.default]
 });
 exports.default = db;
 //# sourceMappingURL=connection.js.map

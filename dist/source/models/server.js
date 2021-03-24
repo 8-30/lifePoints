@@ -29,7 +29,9 @@ class Server {
             insumo: '/api/insumo',
             persona: '/api/persona',
             usuario: '/api/usuario',
-            orden: '/api/orden'
+            orden: '/api/orden',
+            inbox: '/api/inbox',
+            mensaje: '/api/mensaje'
         };
         this.app = express_1.default();
         this.port = process.env.PORT || "8000";

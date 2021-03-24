@@ -17,7 +17,9 @@ class Server {
         insumo:'/api/insumo',
         persona: '/api/persona',
         usuario: '/api/usuario',
-        orden: '/api/orden'
+        orden: '/api/orden',
+        inbox: '/api/inbox',
+        mensaje: '/api/mensaje'
     }
 
 
