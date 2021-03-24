@@ -21,6 +21,8 @@ const usuario_routes_1 = __importDefault(require("../routes/usuario.routes"));
 const orden_routes_1 = __importDefault(require("../routes/orden.routes"));
 const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../database/connection"));
+const inbox_routes_1 = __importDefault(require("../routes/inbox.routes"));
+const mensaje_routes_1 = __importDefault(require("../routes/mensaje.routes"));
 class Server {
     constructor() {
         this.apiPaths = {
@@ -67,6 +69,8 @@ class Server {
         this.app.use(this.apiPaths.persona, persona_routes_1.default);
         this.app.use(this.apiPaths.usuario, usuario_routes_1.default);
         this.app.use(this.apiPaths.orden, orden_routes_1.default);
+        this.app.use(this.apiPaths.inbox, inbox_routes_1.default);
+        this.app.use(this.apiPaths.mensaje, mensaje_routes_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {

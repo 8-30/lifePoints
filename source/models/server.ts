@@ -7,6 +7,8 @@ import usuarioRoutes  from '../routes/usuario.routes';
 import ordenRoutes  from '../routes/orden.routes';
 import cors from 'cors';
 import db from '../database/connection';
+import inboxRoutes from '../routes/inbox.routes';
+import mensajeRoutes from '../routes/mensaje.routes';
 class Server {
 
     private app: Application;
@@ -58,6 +60,8 @@ class Server {
         this.app.use( this.apiPaths.persona, personaRoutes)
         this.app.use( this.apiPaths.usuario, usuarioRoutes)
         this.app.use( this.apiPaths.orden, ordenRoutes)
+        this.app.use( this.apiPaths.inbox, inboxRoutes)
+        this.app.use( this.apiPaths.mensaje, mensajeRoutes)
     }
 
 
