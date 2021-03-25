@@ -50,6 +50,31 @@ export const getInboxPersona =async ( req: Request, res: Response ) =>{
     }
 }
 
+export const getInboxParticipantes =async ( req: Request, res: Response ) =>{
+    
+    const { id1} = req.params;
+    const { id2} = req.params;
+
+    var inbox =await Inbox.findAll({
+        where: Sequelize.or(
+            { persona1: id1,
+            persona2:id2 },
+            { persona1: id2,
+            persona2: id1, }
+          )
+    });
+
+    if(inbox){
+        res.json({
+            inbox
+        });
+    }else{
+        res.status(404).json({
+            msg:`no existe ningun inbox de la persona con el id: ${id1}`
+        });
+    }
+}
+
 export const postInbox = async( req: Request, res: Response ) =>{
     
     const { body } = req;
