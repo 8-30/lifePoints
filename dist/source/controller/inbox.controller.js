@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteInbox = exports.putInbox = exports.postInbox = exports.getInboxPersona = exports.getInbox = exports.getAllInbox = void 0;
+exports.deleteInbox = exports.putInbox = exports.postInbox = exports.getInboxParticipantes = exports.getInboxPersona = exports.getInbox = exports.getAllInbox = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const inbox_model_1 = __importDefault(require("../models/inbox.model"));
 const getAllInbox = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -54,6 +54,26 @@ const getInboxPersona = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getInboxPersona = getInboxPersona;
+const getInboxParticipantes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id1 } = req.params;
+    const { id2 } = req.params;
+    var inbox = yield inbox_model_1.default.findAll({
+        where: sequelize_typescript_1.Sequelize.or({ persona1: id1,
+            persona2: id2 }, { persona1: id2,
+            persona2: id1, })
+    });
+    if (inbox) {
+        res.json({
+            inbox
+        });
+    }
+    else {
+        res.status(404).json({
+            msg: `no existe ningun inbox de la persona con el id: ${id1}`
+        });
+    }
+});
+exports.getInboxParticipantes = getInboxParticipantes;
 const postInbox = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
