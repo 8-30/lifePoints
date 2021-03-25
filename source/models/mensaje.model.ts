@@ -3,6 +3,8 @@ import { Model, Table, Column, AllowNull, NotEmpty, PrimaryKey, AutoIncrement } 
 export interface MensajeI{
     idMensaje ?: number | null;
     idInbox ?: number | null;
+    idEmisor ?: number | null;
+    estado: boolean;
     texto: string;
 
 }
@@ -26,6 +28,16 @@ class Mensaje extends Model implements MensajeI{
     @NotEmpty
     @Column
     idInbox!: number
+
+    @AllowNull(false)
+    @NotEmpty
+    @Column
+    idEmisor!: number
+
+    @AllowNull(false)
+    @NotEmpty
+    @Column
+    estado!: boolean;
 
     @AllowNull(false)
     @NotEmpty

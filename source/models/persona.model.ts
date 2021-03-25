@@ -2,6 +2,8 @@ import { Model, Table, AutoIncrement, PrimaryKey, Column, AllowNull, NotEmpty } 
 
 export interface PersonaI{
     idPersona?: number | null;
+    usuario:string;
+    contrasenia:string;
     nombre: string;
     apellido: string;
     nacimiento: Date;
@@ -26,6 +28,17 @@ class Persona extends Model implements PersonaI{
     @Column
     idPersona?: number
     
+    @AllowNull(false)
+    @NotEmpty
+    @Column
+    usuario!: string
+
+    @AllowNull(false)
+    @NotEmpty
+    @Column
+    contrasenia!: string
+
+
     @AllowNull(false)
     @NotEmpty
     @Column

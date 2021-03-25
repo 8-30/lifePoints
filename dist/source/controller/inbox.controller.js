@@ -12,7 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteInbox = exports.putInbox = exports.postInbox = exports.getInbox = exports.getAllInbox = void 0;
+exports.deleteInbox = exports.putInbox = exports.postInbox = exports.getInboxPersona = exports.getInbox = exports.getAllInbox = void 0;
+const sequelize_typescript_1 = require("sequelize-typescript");
 const inbox_model_1 = __importDefault(require("../models/inbox.model"));
 const getAllInbox = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const inboxes = yield inbox_model_1.default.findAll();
@@ -36,12 +37,41 @@ const getInbox = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getInbox = getInbox;
+const getInboxPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    var inbox = yield inbox_model_1.default.findAll({
+        where: sequelize_typescript_1.Sequelize.or({ persona1: id }, { persona2: id })
+    });
+    if (inbox) {
+        res.json({
+            inbox
+        });
+    }
+    else {
+        res.status(404).json({
+            msg: `no existe ningun inbox de la persona con el id: ${id}`
+        });
+    }
+});
+exports.getInboxPersona = getInboxPersona;
 const postInbox = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
         const inbox = new inbox_model_1.default(body);
-        inbox.save();
-        res.json(inbox);
+        var inboxExistente = yield inbox_model_1.default.findAll({
+            where: sequelize_typescript_1.Sequelize.or({ persona1: inbox.persona1,
+                persona2: inbox.persona2 }, { persona1: inbox.persona2,
+                persona2: inbox.persona1 })
+        });
+        if (inboxExistente.length == 0) {
+            inbox.save();
+            res.json(inbox);
+        }
+        else {
+            res.status(500).json({
+                msg: 'Ya existe ese inbox',
+            });
+        }
     }
     catch (error) {
         console.log(error);
@@ -49,6 +79,16 @@ const postInbox = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             msg: 'Hable con el administrador',
         });
     }
+    /*try {
+        const inbox = new Inbox(body);
+        inbox.save();
+        res.json(inbox);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg:'Hable con el administrador',
+        });
+    }*/
 });
 exports.postInbox = postInbox;
 const putInbox = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

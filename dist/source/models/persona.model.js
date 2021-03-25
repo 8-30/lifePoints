@@ -23,6 +23,18 @@ __decorate([
     sequelize_typescript_1.NotEmpty,
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
+], Persona.prototype, "usuario", void 0);
+__decorate([
+    sequelize_typescript_1.AllowNull(false),
+    sequelize_typescript_1.NotEmpty,
+    sequelize_typescript_1.Column,
+    __metadata("design:type", String)
+], Persona.prototype, "contrasenia", void 0);
+__decorate([
+    sequelize_typescript_1.AllowNull(false),
+    sequelize_typescript_1.NotEmpty,
+    sequelize_typescript_1.Column,
+    __metadata("design:type", String)
 ], Persona.prototype, "nombre", void 0);
 __decorate([
     sequelize_typescript_1.AllowNull(false),

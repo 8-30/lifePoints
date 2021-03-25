@@ -3,8 +3,9 @@ import { Model, Table, Column, AllowNull, NotEmpty, PrimaryKey, AutoIncrement } 
 export interface InboxI{
     idInbox ?: number | null;
     persona1  ?: number | null;
-    nombre: string;
     persona2: number;
+    nombre: string;
+
 }
 
 @Table(
@@ -28,12 +29,14 @@ class Inbox extends Model implements InboxI{
     @AllowNull(false)
     @NotEmpty
     @Column
-    nombre!: string
+    persona2!: number;
 
     @AllowNull(false)
     @NotEmpty
     @Column
-    persona2!: number;
+    nombre!: string
+
+
 
 }
 export default Inbox;

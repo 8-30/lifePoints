@@ -28,6 +28,18 @@ __decorate([
     sequelize_typescript_1.AllowNull(false),
     sequelize_typescript_1.NotEmpty,
     sequelize_typescript_1.Column,
+    __metadata("design:type", Number)
+], Mensaje.prototype, "idEmisor", void 0);
+__decorate([
+    sequelize_typescript_1.AllowNull(false),
+    sequelize_typescript_1.NotEmpty,
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Boolean)
+], Mensaje.prototype, "estado", void 0);
+__decorate([
+    sequelize_typescript_1.AllowNull(false),
+    sequelize_typescript_1.NotEmpty,
+    sequelize_typescript_1.Column,
     __metadata("design:type", String)
 ], Mensaje.prototype, "texto", void 0);
 Mensaje = __decorate([
