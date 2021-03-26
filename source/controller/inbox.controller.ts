@@ -55,7 +55,7 @@ export const getInboxParticipantes =async ( req: Request, res: Response ) =>{
     const { id1} = req.params;
     const { id2} = req.params;
 
-    var inbox =await Inbox.findAll({
+    var inbox =await Inbox.findOne({
         where: Sequelize.or(
             { persona1: id1,
             persona2:id2 },
@@ -65,9 +65,9 @@ export const getInboxParticipantes =async ( req: Request, res: Response ) =>{
     });
 
     if(inbox){
-        res.json({
+        res.json(
             inbox
-        });
+        );
     }else{
         res.status(404).json({
             msg:`no existe ningun inbox de la persona con el id: ${id1}`

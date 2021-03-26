@@ -57,15 +57,13 @@ exports.getInboxPersona = getInboxPersona;
 const getInboxParticipantes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id1 } = req.params;
     const { id2 } = req.params;
-    var inbox = yield inbox_model_1.default.findAll({
+    var inbox = yield inbox_model_1.default.findOne({
         where: sequelize_typescript_1.Sequelize.or({ persona1: id1,
             persona2: id2 }, { persona1: id2,
             persona2: id1, })
     });
     if (inbox) {
-        res.json({
-            inbox
-        });
+        res.json(inbox);
     }
     else {
         res.status(404).json({
