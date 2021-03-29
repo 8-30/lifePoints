@@ -9,10 +9,21 @@ import cors from 'cors';
 import db from '../database/connection';
 import inboxRoutes from '../routes/inbox.routes';
 import mensajeRoutes from '../routes/mensaje.routes';
+//agregue esto
+import { Server as Serverhttps,createServer } from "http";
+import { Server as Serverio, Socket } from "socket.io";
+
+
+
 class Server {
+    
 
     private app: Application;
     private port: string;
+    // agregue esto
+    private _serverhttps : Serverhttps;
+    private io :any;
+    //
     private apiPaths = {
         administrador:'/api/administrador',
         empleado:'/api/empleado',
@@ -28,11 +39,27 @@ class Server {
     constructor(){
         this.app = express();
         this.port = process.env.PORT || "8000";
+        //agregue esto
+        this._serverhttps = createServer(this.app);
+        this.sockets();
         //Metodos iniciales
         this.dbConnection();
         this.middlewares();
         this.routes();
+
     }
+
+    //agregue esto
+    private sockets(): void {
+        this.io = new Serverio(this._serverhttps);
+          this.io.on("connection", (socket: Socket) => {
+            socket.on("send_message", (data) => {
+                socket.broadcast.emit("receive_message", data)
+                console.log("se conecto")
+            })
+          });
+    }
+    //
 
     async dbConnection(){
         try {

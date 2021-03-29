@@ -23,8 +23,12 @@ const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../database/connection"));
 const inbox_routes_1 = __importDefault(require("../routes/inbox.routes"));
 const mensaje_routes_1 = __importDefault(require("../routes/mensaje.routes"));
+//agregue esto
+const http_1 = require("http");
+const socket_io_1 = require("socket.io");
 class Server {
     constructor() {
+        //
         this.apiPaths = {
             administrador: '/api/administrador',
             empleado: '/api/empleado',
@@ -37,11 +41,25 @@ class Server {
         };
         this.app = express_1.default();
         this.port = process.env.PORT || "8000";
+        //agregue esto
+        this._serverhttps = http_1.createServer(this.app);
+        this.sockets();
         //Metodos iniciales
         this.dbConnection();
         this.middlewares();
         this.routes();
     }
+    //agregue esto
+    sockets() {
+        this.io = new socket_io_1.Server(this._serverhttps);
+        this.io.on("connection", (socket) => {
+            socket.on("send_message", (data) => {
+                socket.broadcast.emit("receive_message", data);
+                console.log("se conecto");
+            });
+        });
+    }
+    //
     dbConnection() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
