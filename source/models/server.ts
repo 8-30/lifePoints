@@ -52,12 +52,6 @@ class Server {
     //agregue esto
     private sockets(): void {
         this.io = new Serverio(this._serverhttps);
-          this.io.on("connection", (socket: Socket) => {
-            socket.on("send_message", (data) => {
-                socket.broadcast.emit("receive_message", data)
-                console.log("se conecto")
-            })
-          });
     }
     //
 
@@ -94,9 +88,16 @@ class Server {
 
 
     listen(){
-        this.app.listen(this.port,() =>{
+       this.app.listen(this.port,() =>{
             console.log('Servidor corriendo en puerto : ' + this.port);
         })
+        //esto agregue
+        this.io.on("connection", (socket: Socket) => {
+            socket.on("send_message", (data) => {
+                socket.broadcast.emit("receive_message", data)
+                console.log("se conecto")
+            })
+          });
     }
 }
 
