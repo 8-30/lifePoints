@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUsuario = exports.putUsuario = exports.postUsuario = exports.getUsuario = exports.getUsuarios = void 0;
+exports.deleteUsuario = exports.putUsuario = exports.postUsuario = exports.AuthUsuario = exports.getUsuario = exports.getUsuarios = void 0;
 const usuario_model_1 = __importDefault(require("../models/usuario.model"));
 const persona_model_1 = __importDefault(require("../models/persona.model"));
 const getUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -44,6 +44,29 @@ const getUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getUsuario = getUsuario;
+const AuthUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, password } = req.params;
+    const persona = yield persona_model_1.default.findOne({ where: { usuario: username } });
+    console.log("mi password" + password);
+    if (persona) {
+        if (persona.contrasenia == password) {
+            res.json({
+                persona
+            });
+        }
+        else {
+            res.status(404).json({
+                msg: `Contraseña incorrecta del usuario ${username}`
+            });
+        }
+    }
+    else {
+        res.status(404).json({
+            msg: `no existe ningun usuario con el ide ${username}`
+        });
+    }
+});
+exports.AuthUsuario = AuthUsuario;
 const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {

@@ -2,6 +2,7 @@
 import {Request, Response} from 'express'
 import Usuario from '../models/usuario.model';
 import Persona from '../models/persona.model';
+import { where } from 'sequelize/types';
 
 export const getUsuarios = async ( req: Request, res: Response ) =>{
     
@@ -30,6 +31,27 @@ export const getUsuario = async ( req: Request, res: Response ) =>{
     }else{
         res.status(404).json({
             msg:`no existe ningun usuario con el ide ${id}`
+        });
+    }
+}
+export const AuthUsuario = async ( req: Request, res: Response ) =>{
+    
+    const { username,password } = req.params;
+    const persona = await Persona.findOne({ where: { usuario: username } });
+    console.log("mi password"+password);
+    if(persona){
+        if(persona.contrasenia==password){
+            res.json({
+                persona
+            });
+        }else{
+            res.status(404).json({
+                msg:`Contraseña incorrecta del usuario ${username}`
+            });    
+        }
+    }else{
+        res.status(404).json({
+            msg:`no existe ningun usuario con el ide ${username}`
         });
     }
 }
