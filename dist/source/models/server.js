@@ -85,14 +85,19 @@ class Server {
         this.app.use(this.apiPaths.mensaje, mensaje_routes_1.default);
     }
     listen() {
-        this.app.listen(this.port, () => {
-            console.log('Servidor corriendo en puerto : ' + this.port);
-        });
-        //esto agregue
-        this.io.on("connection", (socket) => {
-            socket.on("send_message", (data) => {
-                socket.broadcast.emit("receive_message", data);
-                console.log("se conecto");
+        return __awaiter(this, void 0, void 0, function* () {
+            /*this.app.listen(this.port,() =>{
+                 console.log('Servidor corriendo en puerto : ' + this.port);
+             })*/
+            this._serverhttps = yield this._serverhttps.listen(this.app.get('port'), () => {
+                console.log('Server on port %s', this.app.get('port'));
+            });
+            //esto agregue
+            this.io.on("connection", (socket) => {
+                socket.on("send_message", (data) => {
+                    socket.broadcast.emit("receive_message", data);
+                    console.log("se conecto");
+                });
             });
         });
     }
