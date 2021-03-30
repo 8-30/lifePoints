@@ -42,6 +42,7 @@ class Server {
         //agregue esto
         this._serverhttps = createServer(this.app);
         this.sockets();
+        this.conectSocket();
         //Metodos iniciales
         this.dbConnection();
         this.middlewares();
@@ -52,6 +53,14 @@ class Server {
     //agregue esto
     private sockets(): void {
         this.io = new Serverio(this._serverhttps);
+    }
+    async conectSocket(){
+        await this.io.on("connection", (socket: Socket) => {
+            socket.on("send_message", (data) => {
+                socket.broadcast.emit("receive_message", data)
+                console.log("se conecto")
+            })
+          });
     }
     //
 
@@ -93,15 +102,10 @@ class Server {
             console.log('Servidor corriendo en puerto : ' + this.port);
         })*/
         //esto agregue
+
         this._serverhttps=this._serverhttps.listen(this.port, () => {
             console.log('Server on port %s', this.port);
         });
-        this.io.on("connection", (socket: Socket) => {
-            socket.on("send_message", (data) => {
-                socket.broadcast.emit("receive_message", data)
-                console.log("se conecto")
-            })
-          });
     }
     get server(): Serverhttps {
         return this._serverhttps;
