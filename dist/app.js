@@ -8,5 +8,11 @@ const server_1 = __importDefault(require("./source/models/server"));
 //configurar dotenv
 dotenv_1.default.config();
 const server = new server_1.default;
+server.io.on("connection", (socket) => {
+    socket.on("send_message", (data) => {
+        socket.broadcast.emit("receive_message", data);
+        console.log("se conecto");
+    });
+});
 server.listen();
 //# sourceMappingURL=app.js.map

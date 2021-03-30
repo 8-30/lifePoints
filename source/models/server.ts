@@ -22,7 +22,7 @@ class Server {
     private port: string;
     // agregue esto
     private _serverhttps : Serverhttps;
-    private io :any;
+    public io :any;
     //
     private apiPaths = {
         administrador:'/api/administrador',
@@ -42,7 +42,6 @@ class Server {
         //agregue esto
         this._serverhttps = createServer(this.app);
         this.sockets();
-        this.conectSocket();
         //Metodos iniciales
         this.dbConnection();
         this.middlewares();
@@ -53,14 +52,6 @@ class Server {
     //agregue esto
     private sockets(): void {
         this.io = new Serverio(this._serverhttps);
-    }
-    async conectSocket(){
-        await this.io.on("connection", (socket: Socket) => {
-            socket.on("send_message", (data) => {
-                socket.broadcast.emit("receive_message", data)
-                console.log("se conecto")
-            })
-          });
     }
     //
 
