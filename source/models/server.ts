@@ -87,14 +87,11 @@ class Server {
 
 
 
-    async listen(){
-
-       /*this.app.listen(this.port,() =>{
+    listen(){
+        
+       this.app.listen(this.port,() =>{
             console.log('Servidor corriendo en puerto : ' + this.port);
-        })*/
-        this._serverhttps=await this._serverhttps.listen(this.app.get('port'),()=>{
-            console.log('Server on port %s', this.app.get('port'));
-        });
+        })
         //esto agregue
         this.io.on("connection", (socket: Socket) => {
             socket.on("send_message", (data) => {
