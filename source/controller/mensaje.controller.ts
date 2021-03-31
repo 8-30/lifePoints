@@ -33,6 +33,30 @@ export const getAllMensajeInbox = async ( req: Request, res: Response ) =>{
 
 }
 
+export const getLastMensajeInbox = async ( req: Request, res: Response ) =>{
+    
+    const { id } = req.params;
+
+    var mensajes =await Mensaje.findAll({
+        where: { 
+            idInbox: id 
+        } 
+    });
+    var mensaje=mensajes[mensajes.length-1];
+
+    if(mensaje){
+        res.json({
+            mensaje
+        });
+    }else{
+        res.status(404).json({
+            msg:`no existe ningun mensaje del inbox con el id: ${id}`
+        });
+    }
+
+}
+
+
 export const getMensaje =async ( req: Request, res: Response ) =>{
     
     const { id } = req.params;
