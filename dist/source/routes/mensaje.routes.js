@@ -5,6 +5,7 @@ const express_1 = require("express");
 const router = express_1.Router();
 router.get('/', mensaje_controller_1.getAllMensaje);
 router.get('/inbox/:id', mensaje_controller_1.getAllMensajeInbox);
+router.get('/inboxlast/:id/', mensaje_controller_1.getLastMensajeInbox);
 router.get('/:id', mensaje_controller_1.getMensaje);
 router.post('/', mensaje_controller_1.postMensaje);
 router.put('/:id', mensaje_controller_1.putMensaje);

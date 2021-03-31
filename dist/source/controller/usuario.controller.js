@@ -105,13 +105,10 @@ const putUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         // buscamos a la persona con el mismo id de usuario y la actualizamos
         const persona = yield persona_model_1.default.findByPk(id);
         yield (persona === null || persona === void 0 ? void 0 : persona.update(body));
-        res.json({
-            usuario,
-            persona
-        });
+        res.json(true);
     }
     catch (error) {
-        console.log(error);
+        res.json(false);
         res.status(500).json({
             msg: 'Hable con el administrador',
         });
