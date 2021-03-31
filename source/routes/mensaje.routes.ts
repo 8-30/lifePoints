@@ -8,7 +8,7 @@ const router = Router();
 
 router.get('/',    getAllMensaje );
 router.get('/inbox/:id',    getAllMensajeInbox);
-router.get('/inbox/:id/last',    getLastMensajeInbox);
+router.get('/inboxlast/:id/',    getLastMensajeInbox);
 router.get('/:id', getMensaje );
 router.post('/',    postMensaje );
 router.put('/:id', putMensaje );
