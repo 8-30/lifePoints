@@ -89,9 +89,14 @@ class Server {
             /*this.app.listen(this.port,() =>{
                  console.log('Servidor corriendo en puerto : ' + this.port);
              })*/
-            //esto agregue
             this._serverhttps = this._serverhttps.listen(this.port, () => {
                 console.log('Server on port %s', this.port);
+            });
+            this.io.on("connection", (socket) => {
+                socket.on("send_message", (data) => {
+                    socket.broadcast.emit("receive_message", data);
+                    console.log("se conecto");
+                });
             });
         });
     }

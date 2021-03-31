@@ -96,12 +96,11 @@ export const putUsuario = async ( req: Request, res: Response ) =>{
          // buscamos a la persona con el mismo id de usuario y la actualizamos
         const persona = await Persona.findByPk(id);
         await persona?.update(body);
-        res.json({
-            usuario,
-            persona
-        });
+        res.json(
+            true
+        );
     } catch (error) {
-        console.log(error);
+        res.json(false)
         res.status(500).json({
             msg:'Hable con el administrador',
         });
