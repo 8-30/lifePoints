@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEmpleado = exports.putEmpleado = exports.postEmpleado = exports.getEmpleado = exports.getEmpleados = void 0;
+exports.AuthEmpleado = exports.deleteEmpleado = exports.putEmpleado = exports.postEmpleado = exports.getEmpleado = exports.getEmpleados = void 0;
 const empleado_models_1 = __importDefault(require("../models/empleado.models"));
 const persona_model_1 = __importDefault(require("../models/persona.model"));
 const getEmpleados = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -120,6 +120,37 @@ const deleteEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.deleteEmpleado = deleteEmpleado;
+const AuthEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, password } = req.params;
+    const persona = yield persona_model_1.default.findOne({ where: { usuario: username } });
+    console.log("mi password" + password);
+    if (persona) {
+        const empleado = yield empleado_models_1.default.findOne({ where: { idEmpleado: persona === null || persona === void 0 ? void 0 : persona.idPersona } });
+        if (empleado) {
+            if (persona.contrasenia == password) {
+                res.json({
+                    persona
+                });
+            }
+            else {
+                res.status(404).json({
+                    msg: `Contraseña incorrecta del usuario ${username}`
+                });
+            }
+        }
+        else {
+            res.status(404).json({
+                msg: `Esta persona: ${username} no es un usuario`
+            });
+        }
+    }
+    else {
+        res.status(404).json({
+            msg: `no existe ningun usuario con el ide ${username}`
+        });
+    }
+});
+exports.AuthEmpleado = AuthEmpleado;
 //funciones
 function obtenerInformacionEmpleado(empleado) {
     return __awaiter(this, void 0, void 0, function* () {

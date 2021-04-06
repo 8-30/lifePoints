@@ -8,5 +8,6 @@ router.get('/:id', administrador_controller_1.getAdministrador);
 router.post('/', administrador_controller_1.postAdministrador);
 router.put('/:id', administrador_controller_1.putAdministrador);
 router.delete('/:id', administrador_controller_1.deleteAdministrador);
+router.get('/username/:username/password/:password', administrador_controller_1.AuthAdmin);
 exports.default = router;
 //# sourceMappingURL=administrador.routes.js.map

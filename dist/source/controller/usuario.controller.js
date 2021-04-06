@@ -49,14 +49,22 @@ const AuthUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const persona = yield persona_model_1.default.findOne({ where: { usuario: username } });
     console.log("mi password" + password);
     if (persona) {
-        if (persona.contrasenia == password) {
-            res.json({
-                persona
-            });
+        const usuario = yield usuario_model_1.default.findOne({ where: { idUsuario: persona === null || persona === void 0 ? void 0 : persona.idPersona } });
+        if (usuario) {
+            if (persona.contrasenia == password) {
+                res.json({
+                    persona
+                });
+            }
+            else {
+                res.status(404).json({
+                    msg: `Contraseña incorrecta del usuario ${username}`
+                });
+            }
         }
         else {
             res.status(404).json({
-                msg: `Contraseña incorrecta del usuario ${username}`
+                msg: `Esta persona: ${username} no es un usuario`
             });
         }
     }

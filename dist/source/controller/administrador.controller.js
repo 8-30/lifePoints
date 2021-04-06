@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAdministrador = exports.putAdministrador = exports.postAdministrador = exports.getAdministrador = exports.getAdministradores = void 0;
+exports.AuthAdmin = exports.deleteAdministrador = exports.putAdministrador = exports.postAdministrador = exports.getAdministrador = exports.getAdministradores = void 0;
 const administrador_model_1 = __importDefault(require("../models/administrador.model"));
 const persona_model_1 = __importDefault(require("../models/persona.model"));
 const getAdministradores = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -120,6 +120,37 @@ const deleteAdministrador = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.deleteAdministrador = deleteAdministrador;
+const AuthAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, password } = req.params;
+    const persona = yield persona_model_1.default.findOne({ where: { usuario: username } });
+    console.log("mi password" + password);
+    if (persona) {
+        const admin = yield administrador_model_1.default.findOne({ where: { idAdministrador: persona === null || persona === void 0 ? void 0 : persona.idPersona } });
+        if (admin) {
+            if (persona.contrasenia == password) {
+                res.json({
+                    persona
+                });
+            }
+            else {
+                res.status(404).json({
+                    msg: `Contraseña incorrecta del usuario ${username}`
+                });
+            }
+        }
+        else {
+            res.status(404).json({
+                msg: `Esta persona: ${username} no es un admin`
+            });
+        }
+    }
+    else {
+        res.status(404).json({
+            msg: `no existe ningun usuario con el ide ${username}`
+        });
+    }
+});
+exports.AuthAdmin = AuthAdmin;
 //funciones
 function obtenerInformacionAdministrador(administrador) {
     return __awaiter(this, void 0, void 0, function* () {

@@ -8,5 +8,6 @@ router.get('/:id', empleado_controller_1.getEmpleado);
 router.post('/', empleado_controller_1.postEmpleado);
 router.put('/:id', empleado_controller_1.putEmpleado);
 router.delete('/:id', empleado_controller_1.deleteEmpleado);
+router.get('/username/:username/password/:password', empleado_controller_1.AuthEmpleado);
 exports.default = router;
 //# sourceMappingURL=empleado.routes.js.map
