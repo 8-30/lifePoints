@@ -113,6 +113,37 @@ export const deleteAdministrador = async( req: Request, res: Response ) =>{
     
 }
 
+
+export const AuthAdmin = async ( req: Request, res: Response ) =>{
+    
+    const { username,password } = req.params;
+    const persona = await Persona.findOne({ where: { usuario: username } });
+    console.log("mi password"+password);
+    if(persona){
+        const admin = await Administrador.findOne({where:{idAdministrador:persona?.idPersona}});
+        if(admin){
+            if(persona.contrasenia==password){
+                res.json({
+                    persona
+                });
+            }else{
+                res.status(404).json({
+                    msg:`Contraseña incorrecta del usuario ${username}`
+                });    
+            }
+        }else{
+            res.status(404).json({
+                msg:`Esta persona: ${username} no es un admin`
+            });  
+        }
+ 
+    }else{
+        res.status(404).json({
+            msg:`no existe ningun usuario con el ide ${username}`
+        });
+    }
+}
+
 //funciones
 async function obtenerInformacionAdministrador(administrador:Administrador){
     //buscamos a la persona que tenga el mismo id que el administrador

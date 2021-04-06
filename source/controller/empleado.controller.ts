@@ -112,6 +112,36 @@ export const deleteEmpleado = async( req: Request, res: Response ) =>{
     }
     
 }
+export const AuthEmpleado = async ( req: Request, res: Response ) =>{
+    
+    const { username,password } = req.params;
+    const persona = await Persona.findOne({ where: { usuario: username } });
+    console.log("mi password"+password);
+    if(persona){
+        const empleado = await Empleado.findOne({where:{idEmpleado:persona?.idPersona}});
+        if(empleado){
+            if(persona.contrasenia==password){
+                res.json({
+                    persona
+                });
+            }else{
+                res.status(404).json({
+                    msg:`Contraseña incorrecta del usuario ${username}`
+                });    
+            }
+        }else{
+            res.status(404).json({
+                msg:`Esta persona: ${username} no es un usuario`
+            });  
+        }
+ 
+    }else{
+        res.status(404).json({
+            msg:`no existe ningun usuario con el ide ${username}`
+        });
+    }
+}
+
 
 //funciones
 async function obtenerInformacionEmpleado(empleado:Empleado){

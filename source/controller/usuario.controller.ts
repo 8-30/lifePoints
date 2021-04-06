@@ -40,15 +40,23 @@ export const AuthUsuario = async ( req: Request, res: Response ) =>{
     const persona = await Persona.findOne({ where: { usuario: username } });
     console.log("mi password"+password);
     if(persona){
-        if(persona.contrasenia==password){
-            res.json({
-                persona
-            });
+        const usuario = await Usuario.findOne({where:{idUsuario:persona?.idPersona}});
+        if(usuario){
+            if(persona.contrasenia==password){
+                res.json({
+                    persona
+                });
+            }else{
+                res.status(404).json({
+                    msg:`Contraseña incorrecta del usuario ${username}`
+                });    
+            }
         }else{
             res.status(404).json({
-                msg:`Contraseña incorrecta del usuario ${username}`
-            });    
+                msg:`Esta persona: ${username} no es un usuario`
+            });  
         }
+ 
     }else{
         res.status(404).json({
             msg:`no existe ningun usuario con el ide ${username}`
