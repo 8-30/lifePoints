@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthEmpleado = exports.deleteEmpleado = exports.putEmpleado = exports.postEmpleado = exports.getEmpleado = exports.getEmpleados = void 0;
+exports.disableEmpleado = exports.AuthEmpleado = exports.deleteEmpleado = exports.putEmpleado = exports.postEmpleado = exports.getEmpleado = exports.getEmpleados = void 0;
 const empleado_models_1 = __importDefault(require("../models/empleado.models"));
 const persona_model_1 = __importDefault(require("../models/persona.model"));
 const getEmpleados = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -151,6 +151,27 @@ const AuthEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.AuthEmpleado = AuthEmpleado;
+const disableEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        var empleado = yield empleado_models_1.default.findByPk(id);
+        if (!empleado) {
+            return res.status(404).json({
+                msg: `no existe ningun empleado con el id ${id}`,
+            });
+        }
+        empleado.setDataValue("enable", false);
+        yield empleado.update({ enable: empleado.enable });
+        res.json(true);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: 'Hable con el administrador',
+        });
+    }
+});
+exports.disableEmpleado = disableEmpleado;
 //funciones
 function obtenerInformacionEmpleado(empleado) {
     return __awaiter(this, void 0, void 0, function* () {

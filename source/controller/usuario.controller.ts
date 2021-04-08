@@ -114,6 +114,28 @@ export const putUsuario = async ( req: Request, res: Response ) =>{
         });
     }
 }
+export const disableUsuario = async ( req: Request, res: Response ) =>{
+
+    const { id } = req.params;
+    try {
+        var usuario = await Usuario.findByPk(id);
+        if(!usuario){
+            return res.status(404).json({
+                msg: `no existe ningun usuario con el id ${id}`,
+            });
+        }
+        usuario.setDataValue('enable',false);
+        await usuario.update({enable:usuario.enable});
+        res.json(
+            true
+        );
+    } catch (error) {
+        res.json(false)
+        res.status(500).json({
+            msg:'Hable con el administrador',
+        });
+    }
+}
 
 export const deleteUsuario = async( req: Request, res: Response ) =>{
 

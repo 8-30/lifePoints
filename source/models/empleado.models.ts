@@ -7,6 +7,7 @@ export interface EmpleadoI{
     tarifa: number;
     calificacion: number;
     descripcion: string;
+    enable: boolean;
     persona: Persona
 }
 
@@ -41,6 +42,11 @@ class Empleado extends Model implements EmpleadoI{
     @NotEmpty
     @Column
     descripcion!: string;
+
+    @AllowNull(false)
+    @NotEmpty
+    @Column
+    enable!: boolean;
 
     persona!: Persona;
 

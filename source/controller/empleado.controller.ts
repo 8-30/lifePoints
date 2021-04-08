@@ -142,6 +142,27 @@ export const AuthEmpleado = async ( req: Request, res: Response ) =>{
     }
 }
 
+export const disableEmpleado = async ( req: Request, res: Response ) =>{
+
+    const { id } = req.params;
+    try {
+        var empleado = await Empleado.findByPk(id);
+        if(!empleado){
+            return res.status(404).json({
+                msg: `no existe ningun empleado con el id ${id}`,
+            });
+        }
+        empleado.setDataValue("enable",false);
+        await empleado.update({enable:empleado.enable});
+        res.json(true);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg:'Hable con el administrador',
+        });
+    }
+}
+
 
 //funciones
 async function obtenerInformacionEmpleado(empleado:Empleado){

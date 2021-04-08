@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUsuario = exports.putUsuario = exports.postUsuario = exports.AuthUsuario = exports.getUsuario = exports.getUsuarios = void 0;
+exports.deleteUsuario = exports.disableUsuario = exports.putUsuario = exports.postUsuario = exports.AuthUsuario = exports.getUsuario = exports.getUsuarios = void 0;
 const usuario_model_1 = __importDefault(require("../models/usuario.model"));
 const persona_model_1 = __importDefault(require("../models/persona.model"));
 const getUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -123,6 +123,27 @@ const putUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.putUsuario = putUsuario;
+const disableUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        var usuario = yield usuario_model_1.default.findByPk(id);
+        if (!usuario) {
+            return res.status(404).json({
+                msg: `no existe ningun usuario con el id ${id}`,
+            });
+        }
+        usuario.setDataValue('enable', false);
+        yield usuario.update({ enable: usuario.enable });
+        res.json(true);
+    }
+    catch (error) {
+        res.json(false);
+        res.status(500).json({
+            msg: 'Hable con el administrador',
+        });
+    }
+});
+exports.disableUsuario = disableUsuario;
 const deleteUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {

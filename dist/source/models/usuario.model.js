@@ -24,6 +24,12 @@ __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)
 ], Usuario.prototype, "calificacion", void 0);
+__decorate([
+    sequelize_typescript_1.AllowNull(false),
+    sequelize_typescript_1.NotEmpty,
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Boolean)
+], Usuario.prototype, "enable", void 0);
 Usuario = __decorate([
     sequelize_typescript_1.Table({
         tableName: "usuario",

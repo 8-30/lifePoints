@@ -4,6 +4,7 @@ import Persona from "./persona.model";
 export interface UsuarioI{
     idUsuario?: number | null;
     calificacion: number;
+    enable: boolean;
     persona: Persona;
 }
 
@@ -24,6 +25,11 @@ class Usuario extends Model implements UsuarioI{
     @NotEmpty
     @Column
     calificacion!: number
+
+    @AllowNull(false)
+    @NotEmpty
+    @Column
+    enable!: boolean;
 
     persona!: Persona;
 }
