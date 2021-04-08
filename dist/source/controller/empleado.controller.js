@@ -160,7 +160,7 @@ const disableEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function
                 msg: `no existe ningun empleado con el id ${id}`,
             });
         }
-        empleado.setDataValue("enable", false);
+        empleado.setDataValue("enable", !empleado.enable);
         yield empleado.update({ enable: empleado.enable });
         res.json(true);
     }

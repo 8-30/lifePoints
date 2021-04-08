@@ -132,7 +132,7 @@ const disableUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 msg: `no existe ningun usuario con el id ${id}`,
             });
         }
-        usuario.setDataValue('enable', false);
+        usuario.setDataValue('enable', !usuario.enable);
         yield usuario.update({ enable: usuario.enable });
         res.json(true);
     }

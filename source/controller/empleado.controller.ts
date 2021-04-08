@@ -152,7 +152,7 @@ export const disableEmpleado = async ( req: Request, res: Response ) =>{
                 msg: `no existe ningun empleado con el id ${id}`,
             });
         }
-        empleado.setDataValue("enable",false);
+        empleado.setDataValue("enable",!empleado.enable);
         await empleado.update({enable:empleado.enable});
         res.json(true);
     } catch (error) {

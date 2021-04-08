@@ -124,7 +124,7 @@ export const disableUsuario = async ( req: Request, res: Response ) =>{
                 msg: `no existe ningun usuario con el id ${id}`,
             });
         }
-        usuario.setDataValue('enable',false);
+        usuario.setDataValue('enable',!usuario.enable);
         await usuario.update({enable:usuario.enable});
         res.json(
             true
