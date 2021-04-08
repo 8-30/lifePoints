@@ -162,7 +162,7 @@ const disableEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function
         }
         empleado.setDataValue("enable", !empleado.enable);
         yield empleado.update({ enable: empleado.enable });
-        res.json(true);
+        res.json(empleado.enable);
     }
     catch (error) {
         console.log(error);

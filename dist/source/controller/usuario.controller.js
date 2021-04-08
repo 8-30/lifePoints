@@ -134,7 +134,7 @@ const disableUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function*
         }
         usuario.setDataValue('enable', !usuario.enable);
         yield usuario.update({ enable: usuario.enable });
-        res.json(true);
+        res.json(usuario.enable);
     }
     catch (error) {
         res.json(false);

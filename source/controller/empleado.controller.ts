@@ -154,7 +154,7 @@ export const disableEmpleado = async ( req: Request, res: Response ) =>{
         }
         empleado.setDataValue("enable",!empleado.enable);
         await empleado.update({enable:empleado.enable});
-        res.json(true);
+        res.json(empleado.enable);
     } catch (error) {
         console.log(error);
         res.status(500).json({

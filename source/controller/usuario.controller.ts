@@ -127,7 +127,7 @@ export const disableUsuario = async ( req: Request, res: Response ) =>{
         usuario.setDataValue('enable',!usuario.enable);
         await usuario.update({enable:usuario.enable});
         res.json(
-            true
+            usuario.enable
         );
     } catch (error) {
         res.json(false)
