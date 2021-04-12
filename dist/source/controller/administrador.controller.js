@@ -75,22 +75,31 @@ exports.postAdministrador = postAdministrador;
 const autenticacionAdministrador = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     const { usuario, contrasenia } = body;
-    const persona = yield persona_model_1.default.findOne({ where: { usuario: usuario } });
-    if (!persona) {
+    try {
+        const persona = yield persona_model_1.default.findOne({ where: { usuario: usuario } });
+        console.log(persona === null || persona === void 0 ? void 0 : persona.idPersona);
+        const administrador = yield administrador_model_1.default.findByPk(persona === null || persona === void 0 ? void 0 : persona.idPersona);
+        if (!(persona && administrador)) {
+            res.status(401).json({
+                error: 'invalid user or password'
+            });
+        }
+        const passwordCorrect = (persona === null) ? false : yield bcrypt_1.default.compare(contrasenia, persona.contrasenia);
+        if (!(persona && administrador && passwordCorrect)) {
+            res.status(401).json({
+                error: 'invalid user or password'
+            });
+        }
+        res.send({
+            usuario: persona === null || persona === void 0 ? void 0 : persona.usuario,
+            idPersona: persona === null || persona === void 0 ? void 0 : persona.idPersona,
+        });
+    }
+    catch (error) {
         res.status(401).json({
             error: 'invalid user or password'
         });
     }
-    const passwordCorrect = (persona === null) ? false : yield bcrypt_1.default.compare(contrasenia, persona.contrasenia);
-    if (!(persona && passwordCorrect)) {
-        res.status(401).json({
-            error: 'invalid user or password'
-        });
-    }
-    res.send({
-        usuario: persona === null || persona === void 0 ? void 0 : persona.usuario,
-        idPersona: persona === null || persona === void 0 ? void 0 : persona.idPersona,
-    });
 });
 exports.autenticacionAdministrador = autenticacionAdministrador;
 const putAdministrador = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

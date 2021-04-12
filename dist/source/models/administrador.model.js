@@ -17,18 +17,6 @@ __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)
 ], Administrador.prototype, "idAdministrador", void 0);
-__decorate([
-    sequelize_typescript_1.AllowNull(false),
-    sequelize_typescript_1.NotEmpty,
-    sequelize_typescript_1.Column,
-    __metadata("design:type", String)
-], Administrador.prototype, "usuario", void 0);
-__decorate([
-    sequelize_typescript_1.AllowNull(false),
-    sequelize_typescript_1.NotEmpty,
-    sequelize_typescript_1.Column,
-    __metadata("design:type", String)
-], Administrador.prototype, "contrasena", void 0);
 Administrador = __decorate([
     sequelize_typescript_1.Table({
         tableName: "administrador",

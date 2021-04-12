@@ -66,23 +66,33 @@ export const postAdministrador = async ( req: Request, res: Response ) =>{
 export const autenticacionAdministrador = async ( req: Request, res: Response ) =>{
     const {body}=req;
     const { usuario,contrasenia } = body;
-    const persona = await Persona.findOne({ where: { usuario: usuario } });
-    if(!persona) {
+    try {
+        const persona = await Persona.findOne({ where: { usuario: usuario } });
+        console.log(persona?.idPersona);
+        const administrador = await Administrador.findByPk(persona?.idPersona);
+        
+        if(!(persona && administrador)) {
+            res.status(401).json({
+                error: 'invalid user or password'
+            })
+        }
+        const passwordCorrect = (persona === null) ?  false : await brypt.compare(contrasenia,persona.contrasenia);
+    
+        if (!(persona && administrador && passwordCorrect )) {
+            res.status(401).json({
+                error: 'invalid user or password'
+            })
+        }
+        res.send({
+            usuario:persona?.usuario,
+            idPersona:persona?.idPersona,
+        });
+    } catch (error) {
         res.status(401).json({
             error: 'invalid user or password'
         })
     }
-    const passwordCorrect = (persona === null) ?  false : await brypt.compare(contrasenia,persona.contrasenia);
 
-    if (!(persona && passwordCorrect)) {
-        res.status(401).json({
-            error: 'invalid user or password'
-        })
-    }
-    res.send({
-        usuario:persona?.usuario,
-        idPersona:persona?.idPersona,
-    });
 }
 
 export const putAdministrador = async ( req: Request, res: Response ) =>{
