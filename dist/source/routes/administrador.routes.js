@@ -6,6 +6,7 @@ const router = express_1.Router();
 router.get('/', administrador_controller_1.getAdministradores);
 router.get('/:id', administrador_controller_1.getAdministrador);
 router.post('/', administrador_controller_1.postAdministrador);
+router.post('/autenticacion', administrador_controller_1.autenticacionAdministrador);
 router.put('/:id', administrador_controller_1.putAdministrador);
 router.delete('/:id', administrador_controller_1.deleteAdministrador);
 router.get('/username/:username/password/:password', administrador_controller_1.AuthAdmin);

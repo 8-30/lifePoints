@@ -72,7 +72,7 @@ export const autenticacionUsuario = async ( req: Request, res: Response ) =>{
             error: 'invalid user or password'
         })
     }
-    res.json({
+    res.send({
         usuario:persona?.usuario,
         idPersona:persona?.idPersona,
     });

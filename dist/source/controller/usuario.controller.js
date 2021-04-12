@@ -80,7 +80,7 @@ const autenticacionUsuario = (req, res) => __awaiter(void 0, void 0, void 0, fun
             error: 'invalid user or password'
         });
     }
-    res.json({
+    res.send({
         usuario: persona === null || persona === void 0 ? void 0 : persona.usuario,
         idPersona: persona === null || persona === void 0 ? void 0 : persona.idPersona,
     });
