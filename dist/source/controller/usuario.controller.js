@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUsuario = exports.disableUsuario = exports.putUsuario = exports.postUsuario = exports.AuthUsuario = exports.getUsuario = exports.getUsuarios = void 0;
+exports.deleteUsuario = exports.disableUsuario = exports.putUsuario = exports.postUsuario = exports.autenticacionUsuario = exports.AuthUsuario = exports.getUsuario = exports.getUsuarios = void 0;
 const usuario_model_1 = __importDefault(require("../models/usuario.model"));
 const persona_model_1 = __importDefault(require("../models/persona.model"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const getUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const usuarios = yield usuario_model_1.default.findAll();
     //for para recorrer todos los usuarios
@@ -47,40 +48,54 @@ exports.getUsuario = getUsuario;
 const AuthUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.params;
     const persona = yield persona_model_1.default.findOne({ where: { usuario: username } });
-    console.log("mi password" + password);
-    if (persona) {
-        const usuario = yield usuario_model_1.default.findOne({ where: { idUsuario: persona === null || persona === void 0 ? void 0 : persona.idPersona } });
-        if (usuario) {
-            if (persona.contrasenia == password) {
-                res.json({
-                    persona
-                });
-            }
-            else {
-                res.status(404).json({
-                    msg: `Contraseña incorrecta del usuario ${username}`
-                });
-            }
-        }
-        else {
-            res.status(404).json({
-                msg: `Esta persona: ${username} no es un usuario`
-            });
-        }
-    }
-    else {
-        res.status(404).json({
-            msg: `no existe ningun usuario con el ide ${username}`
+    if (!persona) {
+        res.status(401).json({
+            error: 'invalid user or password'
         });
     }
+    const passwordCorrect = (persona === null) ? false : yield bcrypt_1.default.compare(password, persona.contrasenia);
+    if (!(persona && passwordCorrect)) {
+        res.status(401).json({
+            error: 'invalid user or password'
+        });
+    }
+    res.json({
+        usuario: persona === null || persona === void 0 ? void 0 : persona.usuario,
+        idPersona: persona === null || persona === void 0 ? void 0 : persona.idPersona,
+    });
 });
 exports.AuthUsuario = AuthUsuario;
+const autenticacionUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { body } = req;
+    const { usuario, contrasenia } = body;
+    const persona = yield persona_model_1.default.findOne({ where: { usuario: usuario } });
+    if (!persona) {
+        res.status(401).json({
+            error: 'invalid user or password'
+        });
+    }
+    const passwordCorrect = (persona === null) ? false : yield bcrypt_1.default.compare(contrasenia, persona.contrasenia);
+    if (!(persona && passwordCorrect)) {
+        res.status(401).json({
+            error: 'invalid user or password'
+        });
+    }
+    res.json({
+        usuario: persona === null || persona === void 0 ? void 0 : persona.usuario,
+        idPersona: persona === null || persona === void 0 ? void 0 : persona.idPersona,
+    });
+});
+exports.autenticacionUsuario = autenticacionUsuario;
 const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
         ///const administrador = Administrador.create(body);
         //para guardar peromero los datos de persona persona
+        const { contrasenia } = body;
+        const saltRaunds = 10;
+        const passwordHash = yield bcrypt_1.default.hash(contrasenia, saltRaunds);
         const persona = new persona_model_1.default(body);
+        persona.contrasenia = passwordHash;
         yield persona.save();
         // creamos usuario y asignamos el id de persona guardado anteriormente
         const usuario = new usuario_model_1.default(body);

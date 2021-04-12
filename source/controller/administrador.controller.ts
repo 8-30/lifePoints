@@ -2,6 +2,7 @@
 import {Request, Response} from 'express'
 import Administrador from '../models/administrador.model';
 import Persona from '../models/persona.model';
+import brypt from "bcrypt";
 
 export const getAdministradores = async ( req: Request, res: Response ) =>{
     
@@ -41,7 +42,11 @@ export const postAdministrador = async ( req: Request, res: Response ) =>{
     try {
         ///const administrador = Administrador.create(body);
         //para guardar peromero los datos de persona persona
+        const {contrasenia} = body;
+        const saltRaunds = 10;
+        const passwordHash =await brypt.hash(contrasenia,saltRaunds);
         const persona =new Persona(body);
+        persona.contrasenia = passwordHash;
         await persona.save();
         // creamos administrador y asignamos el id de persona guardado anteriormente
         const administrador = new Administrador(body);
@@ -56,6 +61,28 @@ export const postAdministrador = async ( req: Request, res: Response ) =>{
             msg:'Hable con el administrador',
         });
     }
+}
+
+export const autenticacionAdministrador = async ( req: Request, res: Response ) =>{
+    const {body}=req;
+    const { usuario,contrasenia } = body;
+    const persona = await Persona.findOne({ where: { usuario: usuario } });
+    if(!persona) {
+        res.status(401).json({
+            error: 'invalid user or password'
+        })
+    }
+    const passwordCorrect = (persona === null) ?  false : await brypt.compare(contrasenia,persona.contrasenia);
+
+    if (!(persona && passwordCorrect)) {
+        res.status(401).json({
+            error: 'invalid user or password'
+        })
+    }
+    res.json({
+        usuario:persona?.usuario,
+        idPersona:persona?.idPersona,
+    });
 }
 
 export const putAdministrador = async ( req: Request, res: Response ) =>{
