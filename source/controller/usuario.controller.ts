@@ -103,7 +103,7 @@ export const postUsuario = async ( req: Request, res: Response ) =>{
         // creamos usuario y asignamos el id de persona guardado anteriormente
         const usuario = new Usuario(body);
         usuario.setDataValue("idUsuario", persona.idPersona)
-        usuario.save();
+        await usuario.save();
         res.json({
             usuario,
             persona
