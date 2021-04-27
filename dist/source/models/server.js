@@ -23,12 +23,8 @@ const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../database/connection"));
 const inbox_routes_1 = __importDefault(require("../routes/inbox.routes"));
 const mensaje_routes_1 = __importDefault(require("../routes/mensaje.routes"));
-//agregue esto
-const http_1 = require("http");
-const socket_io_1 = require("socket.io");
 class Server {
     constructor() {
-        //
         this.apiPaths = {
             administrador: '/api/administrador',
             empleado: '/api/empleado',
@@ -41,19 +37,11 @@ class Server {
         };
         this.app = express_1.default();
         this.port = process.env.PORT || "8000";
-        //agregue esto
-        this._serverhttps = http_1.createServer(this.app);
-        this.sockets();
         //Metodos iniciales
         this.dbConnection();
         this.middlewares();
         this.routes();
     }
-    //agregue esto
-    sockets() {
-        this.io = new socket_io_1.Server(this._serverhttps);
-    }
-    //
     dbConnection() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -86,22 +74,10 @@ class Server {
     }
     listen() {
         return __awaiter(this, void 0, void 0, function* () {
-            /*this.app.listen(this.port,() =>{
-                 console.log('Servidor corriendo en puerto : ' + this.port);
-             })*/
-            this._serverhttps = this._serverhttps.listen(this.port, () => {
-                console.log('Server on port %s', this.port);
-            });
-            this.io.on("connection", (socket) => {
-                socket.on("send_message", (data) => {
-                    socket.broadcast.emit("receive_message", data);
-                    console.log("se conecto");
-                });
+            this.app.listen(this.port, () => {
+                console.log('Servidor corriendo en puerto : ' + this.port);
             });
         });
-    }
-    get server() {
-        return this._serverhttps;
     }
 }
 exports.default = Server;

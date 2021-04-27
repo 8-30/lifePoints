@@ -16,7 +16,6 @@ export interface UsuarioI{
 )
 class Usuario extends Model implements UsuarioI{
     
-    @AutoIncrement
     @PrimaryKey
     @Column
     idUsuario?: number

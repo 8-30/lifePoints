@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.disableEmpleado = exports.AuthEmpleado = exports.deleteEmpleado = exports.putEmpleado = exports.postEmpleado = exports.getEmpleado = exports.getEmpleados = void 0;
+exports.disableEmpleado = exports.AuthEmpleado = exports.deleteEmpleado = exports.putEmpleado = exports.autenticacionEmpleado = exports.postEmpleado = exports.getEmpleado = exports.getEmpleados = void 0;
 const empleado_models_1 = __importDefault(require("../models/empleado.models"));
 const persona_model_1 = __importDefault(require("../models/persona.model"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const getEmpleados = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const empleados = yield empleado_models_1.default.findAll();
     //for para recorrer todos los empleados
@@ -49,7 +50,11 @@ const postEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         ///const administrador = Administrador.create(body);
         //para guardar peromero los datos de persona persona
+        const { contrasenia } = body;
+        const saltRaunds = 10;
+        const passwordHash = yield bcrypt_1.default.hash(contrasenia, saltRaunds);
         const persona = new persona_model_1.default(body);
+        persona.contrasenia = passwordHash;
         yield persona.save();
         // creamos empleado y asignamos el id de persona guardado anteriormente
         const empleado = new empleado_models_1.default(body);
@@ -67,6 +72,36 @@ const postEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.postEmpleado = postEmpleado;
+const autenticacionEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { body } = req;
+    const { usuario, contrasenia } = body;
+    try {
+        const persona = yield persona_model_1.default.findOne({ where: { usuario: usuario } });
+        console.log(persona === null || persona === void 0 ? void 0 : persona.idPersona);
+        const empleado = yield empleado_models_1.default.findByPk(persona === null || persona === void 0 ? void 0 : persona.idPersona);
+        if (!(persona && empleado)) {
+            res.status(401).json({
+                error: 'invalid user or password'
+            });
+        }
+        const passwordCorrect = (persona === null) ? false : yield bcrypt_1.default.compare(contrasenia, persona.contrasenia);
+        if (!(persona && empleado && passwordCorrect)) {
+            res.status(401).json({
+                error: 'invalid user or password'
+            });
+        }
+        res.send({
+            usuario: persona === null || persona === void 0 ? void 0 : persona.usuario,
+            idPersona: persona === null || persona === void 0 ? void 0 : persona.idPersona,
+        });
+    }
+    catch (error) {
+        res.status(401).json({
+            error: 'invalid user or password'
+        });
+    }
+});
+exports.autenticacionEmpleado = autenticacionEmpleado;
 const putEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { body } = req;

@@ -3,6 +3,7 @@ import {Request, Response} from 'express'
 import Usuario from '../models/usuario.model';
 import Persona from '../models/persona.model';
 import { where } from 'sequelize/types';
+import brypt from "bcrypt";
 
 export const getUsuarios = async ( req: Request, res: Response ) =>{
     
@@ -38,45 +39,71 @@ export const AuthUsuario = async ( req: Request, res: Response ) =>{
     
     const { username,password } = req.params;
     const persona = await Persona.findOne({ where: { usuario: username } });
-    console.log("mi password"+password);
-    if(persona){
-        const usuario = await Usuario.findOne({where:{idUsuario:persona?.idPersona}});
-        if(usuario){
-            if(persona.contrasenia==password){
-                res.json({
-                    persona
-                });
-            }else{
-                res.status(404).json({
-                    msg:`Contraseña incorrecta del usuario ${username}`
-                });    
-            }
-        }else{
-            res.status(404).json({
-                msg:`Esta persona: ${username} no es un usuario`
-            });  
-        }
- 
-    }else{
-        res.status(404).json({
-            msg:`no existe ningun usuario con el ide ${username}`
-        });
+    if(!persona) {
+        res.status(401).json({
+            error: 'invalid user or password'
+        })
     }
+    const passwordCorrect = (persona === null) ?  false : await brypt.compare(password,persona.contrasenia);
+
+    if (!(persona && passwordCorrect)) {
+        res.status(401).json({
+            error: 'invalid user or password'
+        })
+    }
+    res.json({
+        usuario:persona?.usuario,
+        idPersona:persona?.idPersona,
+    });
+}
+export const autenticacionUsuario = async ( req: Request, res: Response ) =>{
+    const {body}=req;
+    const { usuario,contrasenia } = body;
+    try {
+        const persona = await Persona.findOne({ where: { usuario: usuario } });
+        console.log(persona?.idPersona);
+        const usuarioEncontrado = await Usuario.findByPk(persona?.idPersona);
+        
+        if(!(persona && usuarioEncontrado)) {
+            res.status(401).json({
+                error: 'invalid user or password'
+            })
+        }
+        const passwordCorrect = (persona === null) ?  false : await brypt.compare(contrasenia,persona.contrasenia);
+    
+        if (!(persona && usuarioEncontrado && passwordCorrect )) {
+            res.status(401).json({
+                error: 'invalid user or password'
+            })
+        }
+        res.send({
+            usuario:persona?.usuario,
+            idPersona:persona?.idPersona,
+        });
+    } catch (error) {
+        res.status(401).json({
+            error: 'invalid user or password'
+        })
+    }
+
 }
 
 export const postUsuario = async ( req: Request, res: Response ) =>{
     
     const { body } = req;
-
     try {
         ///const administrador = Administrador.create(body);
         //para guardar peromero los datos de persona persona
+        const {contrasenia} = body;
+        const saltRaunds = 10;
+        const passwordHash =await brypt.hash(contrasenia,saltRaunds);
         const persona =new Persona(body);
+        persona.contrasenia = passwordHash;
         await persona.save();
         // creamos usuario y asignamos el id de persona guardado anteriormente
         const usuario = new Usuario(body);
         usuario.setDataValue("idUsuario", persona.idPersona)
-        usuario.save();
+        await usuario.save();
         res.json({
             usuario,
             persona

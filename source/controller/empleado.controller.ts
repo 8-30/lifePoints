@@ -3,6 +3,7 @@ import {Request, Response} from 'express'
 import { where } from 'sequelize/types';
 import Empleado from '../models/empleado.models';
 import Persona from '../models/persona.model';
+import brypt from "bcrypt";
 
 export const getEmpleados = async ( req: Request, res: Response ) =>{
     
@@ -42,7 +43,11 @@ export const postEmpleado = async ( req: Request, res: Response ) =>{
     try {
         ///const administrador = Administrador.create(body);
         //para guardar peromero los datos de persona persona
+        const {contrasenia} = body;
+        const saltRaunds = 10;
+        const passwordHash =await brypt.hash(contrasenia,saltRaunds);
         const persona =new Persona(body);
+        persona.contrasenia = passwordHash;
         await persona.save();
         // creamos empleado y asignamos el id de persona guardado anteriormente
         const empleado = new Empleado(body);
@@ -58,7 +63,37 @@ export const postEmpleado = async ( req: Request, res: Response ) =>{
         });
     }
 }
+export const autenticacionEmpleado = async ( req: Request, res: Response ) =>{
+    const {body}=req;
+    const { usuario,contrasenia } = body;
+    try {
+        const persona = await Persona.findOne({ where: { usuario: usuario } });
+        console.log(persona?.idPersona);
+        const empleado = await Empleado.findByPk(persona?.idPersona);
+        
+        if(!(persona && empleado)) {
+            res.status(401).json({
+                error: 'invalid user or password'
+            })
+        }
+        const passwordCorrect = (persona === null) ?  false : await brypt.compare(contrasenia,persona.contrasenia);
+    
+        if (!(persona && empleado && passwordCorrect )) {
+            res.status(401).json({
+                error: 'invalid user or password'
+            })
+        }
+        res.send({
+            usuario:persona?.usuario,
+            idPersona:persona?.idPersona,
+        });
+    } catch (error) {
+        res.status(401).json({
+            error: 'invalid user or password'
+        })
+    }
 
+}
 export const putEmpleado = async ( req: Request, res: Response ) =>{
 
     const { id } = req.params;

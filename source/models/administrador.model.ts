@@ -3,8 +3,6 @@ import Persona from "./persona.model";
 
 export interface AdministradorI{
     idAdministrador ?: number | null;
-    usuario: string;
-    contrasena: string;
     persona: Persona
    
 }
@@ -20,18 +18,7 @@ class Administrador extends Model implements AdministradorI{
     @PrimaryKey
     @Column
     idAdministrador ?: number
-
     
-    @AllowNull(false)
-    @NotEmpty
-    @Column
-    usuario!: string
-
-    @AllowNull(false)
-    @NotEmpty
-    @Column
-    contrasena!: string;
-
     persona!: Persona;
 
 }

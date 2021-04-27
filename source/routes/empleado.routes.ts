@@ -1,4 +1,6 @@
-import { getEmpleados,getEmpleado, postEmpleado, putEmpleado, deleteEmpleado, AuthEmpleado, disableEmpleado, getEmpleadosHabilitados } from './../controller/empleado.controller';
+
+import { getEmpleados,getEmpleado, postEmpleado, putEmpleado, deleteEmpleado, AuthEmpleado, disableEmpleado, autenticacionEmpleado, getEmpleadosHabilitados  } from './../controller/empleado.controller';
+
 
 import { Router } from 'express';
 
@@ -9,6 +11,7 @@ router.get('/',    getEmpleados );
 router.get('/enable',    getEmpleadosHabilitados );
 router.get('/:id', getEmpleado );
 router.post('/',    postEmpleado );
+router.post('/autenticacion',    autenticacionEmpleado);
 router.put('/:id', putEmpleado );
 router.delete('/:id', deleteEmpleado );
 router.put('/disable/:id', disableEmpleado );
