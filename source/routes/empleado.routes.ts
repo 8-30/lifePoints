@@ -8,7 +8,7 @@ import { Router } from 'express';
 const router = Router();
 
 router.get('/',    getEmpleados );
-router.get('/enable',    getEmpleadosHabilitados );
+router.get('/enable/true',    getEmpleadosHabilitados );
 router.get('/:id', getEmpleado );
 router.post('/',    postEmpleado );
 router.post('/autenticacion',    autenticacionEmpleado);
