@@ -1,5 +1,6 @@
 
 import {Request, Response} from 'express'
+import { where } from 'sequelize/types';
 import Empleado from '../models/empleado.models';
 import Persona from '../models/persona.model';
 
@@ -161,6 +162,23 @@ export const disableEmpleado = async ( req: Request, res: Response ) =>{
             msg:'Hable con el administrador',
         });
     }
+}
+
+export const getEmpleadosHabilitados = async ( req: Request, res: Response ) =>{
+
+    const empleados =await Empleado.findAll({
+        where: { 
+            enable: 1 
+        } 
+    });
+   //for para recorrer todos los empleados
+    for(const empleado of empleados ){
+        //llamamos a la funcion para vincular a los empleados con su informacion de personas
+        await obtenerInformacionEmpleado(empleado);    
+    };
+    res.json({
+        empleados
+    })
 }
 
 

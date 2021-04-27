@@ -1,4 +1,4 @@
-import { getEmpleados,getEmpleado, postEmpleado, putEmpleado, deleteEmpleado, AuthEmpleado, disableEmpleado } from './../controller/empleado.controller';
+import { getEmpleados,getEmpleado, postEmpleado, putEmpleado, deleteEmpleado, AuthEmpleado, disableEmpleado, getEmpleadosHabilitados } from './../controller/empleado.controller';
 
 import { Router } from 'express';
 
@@ -6,6 +6,7 @@ import { Router } from 'express';
 const router = Router();
 
 router.get('/',    getEmpleados );
+router.get('/enable',    getEmpleadosHabilitados );
 router.get('/:id', getEmpleado );
 router.post('/',    postEmpleado );
 router.put('/:id', putEmpleado );

@@ -13,6 +13,7 @@ export interface PersonaI{
     genero:string;
     foto:string;
     credencial:string;
+    notyKey:string;
 }
 
 @Table(
@@ -84,6 +85,11 @@ class Persona extends Model implements PersonaI{
     @NotEmpty
     @Column
     credencial!: string;
+
+    @AllowNull(false)
+    @NotEmpty
+    @Column
+    notyKey!: string;
 
 }
 export default Persona;
