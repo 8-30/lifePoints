@@ -109,7 +109,7 @@ const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         // creamos usuario y asignamos el id de persona guardado anteriormente
         const usuario = new usuario_model_1.default(body);
         usuario.setDataValue("idUsuario", persona.idPersona);
-        usuario.save();
+        yield usuario.save();
         res.json({
             usuario,
             persona

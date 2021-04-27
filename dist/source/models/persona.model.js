@@ -84,6 +84,12 @@ __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
 ], Persona.prototype, "credencial", void 0);
+__decorate([
+    sequelize_typescript_1.AllowNull(false),
+    sequelize_typescript_1.NotEmpty,
+    sequelize_typescript_1.Column,
+    __metadata("design:type", String)
+], Persona.prototype, "notyKey", void 0);
 Persona = __decorate([
     sequelize_typescript_1.Table({
         tableName: "persona",

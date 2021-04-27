@@ -40,6 +40,12 @@ __decorate([
     sequelize_typescript_1.NotEmpty,
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
+], Empleado.prototype, "nombreServicio", void 0);
+__decorate([
+    sequelize_typescript_1.AllowNull(false),
+    sequelize_typescript_1.NotEmpty,
+    sequelize_typescript_1.Column,
+    __metadata("design:type", String)
 ], Empleado.prototype, "descripcion", void 0);
 __decorate([
     sequelize_typescript_1.AllowNull(false),

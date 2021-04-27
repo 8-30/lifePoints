@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.disableEmpleado = exports.AuthEmpleado = exports.deleteEmpleado = exports.putEmpleado = exports.autenticacionEmpleado = exports.postEmpleado = exports.getEmpleado = exports.getEmpleados = void 0;
+exports.getEmpleadosHabilitados = exports.disableEmpleado = exports.AuthEmpleado = exports.deleteEmpleado = exports.putEmpleado = exports.autenticacionEmpleado = exports.postEmpleado = exports.getEmpleado = exports.getEmpleados = void 0;
 const empleado_models_1 = __importDefault(require("../models/empleado.models"));
 const persona_model_1 = __importDefault(require("../models/persona.model"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -207,6 +207,23 @@ const disableEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.disableEmpleado = disableEmpleado;
+const getEmpleadosHabilitados = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const empleados = yield empleado_models_1.default.findAll({
+        where: {
+            enable: 1
+        }
+    });
+    //for para recorrer todos los empleados
+    for (const empleado of empleados) {
+        //llamamos a la funcion para vincular a los empleados con su informacion de personas
+        yield obtenerInformacionEmpleado(empleado);
+    }
+    ;
+    res.json({
+        empleados
+    });
+});
+exports.getEmpleadosHabilitados = getEmpleadosHabilitados;
 //funciones
 function obtenerInformacionEmpleado(empleado) {
     return __awaiter(this, void 0, void 0, function* () {
