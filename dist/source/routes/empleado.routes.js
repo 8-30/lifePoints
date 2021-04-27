@@ -4,7 +4,7 @@ const empleado_controller_1 = require("./../controller/empleado.controller");
 const express_1 = require("express");
 const router = express_1.Router();
 router.get('/', empleado_controller_1.getEmpleados);
-router.get('/enable', empleado_controller_1.getEmpleadosHabilitados);
+router.get('/enable/true', empleado_controller_1.getEmpleadosHabilitados);
 router.get('/:id', empleado_controller_1.getEmpleado);
 router.post('/', empleado_controller_1.postEmpleado);
 router.post('/autenticacion', empleado_controller_1.autenticacionEmpleado);
