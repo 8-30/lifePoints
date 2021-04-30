@@ -1,4 +1,4 @@
-import { deleteMensaje, getMensaje, getAllMensaje, postMensaje, putMensaje, getAllMensajeInbox, getLastMensajeInbox, notify } from '../controller/mensaje.controller';
+import { deleteMensaje, getMensaje, getAllMensaje, postMensaje, putMensaje, getAllMensajeInbox, getLastMensajeInbox} from '../controller/mensaje.controller';
 
 
 import { Router } from 'express';
@@ -13,7 +13,7 @@ router.get('/:id', getMensaje );
 router.post('/',    postMensaje );
 router.put('/:id', putMensaje );
 router.delete('/:id', deleteMensaje );
-router.post('/notify',notify  );
+
 
 
 

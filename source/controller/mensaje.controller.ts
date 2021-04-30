@@ -1,8 +1,8 @@
 
 import {Request, Response} from 'express'
-import admin from "firebase-admin"
+
 import Mensaje from '../models/mensaje.model';
-import router from '../routes/administrador.routes';
+
 
 
 
@@ -127,29 +127,4 @@ export const deleteMensaje = async ( req: Request, res: Response ) =>{
     }
     await mensaje?.destroy();
     res.json(mensaje);
-}
-export const notify = async ( req: Request, res: Response ) =>{
-    // This registration token comes from the client FCM SDKs.
-    var registrationToken = 'fb0aBpdpTC2hUX9qC3V5H7:APA91bFUi8xgBA-EWfIe1c9BSBQz-op42pD0AKQDp5sA84HKLjPfJ8Ma66YkPsDuhzI08UkMSH6qX0SIrmnTpT2To4DEa9zKV2tAAtb_olBfqdSXVoc7oGOf0i_cHTPUwumhzpNKxd40';
-
-    var message = {
-    data: {
-        score: '850',
-        time: '2:45'
-    },
-    token: registrationToken
-    };
-
-    // Send a message to the device corresponding to the provided
-    // registration token.
-    admin.messaging().send(message)
-    .then((response) => {
-        // Response is a message ID string.
-        console.log('Successfully sent message:', response);
-    })
-    .catch((error) => {
-        console.log('Error sending message:', error);
-      });
-
-
 }
