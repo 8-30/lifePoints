@@ -10,5 +10,6 @@ router.get('/:id', mensaje_controller_1.getMensaje);
 router.post('/', mensaje_controller_1.postMensaje);
 router.put('/:id', mensaje_controller_1.putMensaje);
 router.delete('/:id', mensaje_controller_1.deleteMensaje);
+router.post('/notify', mensaje_controller_1.notify);
 exports.default = router;
 //# sourceMappingURL=mensaje.routes.js.map
