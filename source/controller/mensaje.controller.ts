@@ -1,6 +1,9 @@
 
 import {Request, Response} from 'express'
+import admin from "firebase-admin"
 import Mensaje from '../models/mensaje.model';
+import router from '../routes/administrador.routes';
+
 
 
 export const getAllMensaje = async ( req: Request, res: Response ) =>{
@@ -126,16 +129,27 @@ export const deleteMensaje = async ( req: Request, res: Response ) =>{
     res.json(mensaje);
 }
 export const notify = async ( req: Request, res: Response ) =>{
+    // This registration token comes from the client FCM SDKs.
+    var registrationToken = 'fb0aBpdpTC2hUX9qC3V5H7:APA91bFUi8xgBA-EWfIe1c9BSBQz-op42pD0AKQDp5sA84HKLjPfJ8Ma66YkPsDuhzI08UkMSH6qX0SIrmnTpT2To4DEa9zKV2tAAtb_olBfqdSXVoc7oGOf0i_cHTPUwumhzpNKxd40';
 
-    res.setHeader("Authorization","key=	AAAA1Z1jYms:APA91bG8TH68WVTx30xFOHTsRrRwRDUj2rida7RxNUuQfDa7TML7OLHtnDriXMawKYAnnFxLxWbbnqczWWjEsmhmwQII4g-Stb5tL12hTdrPXd7WE-Kb52da2fsHoMNWaSuIeLr91GYs");
-    res.json({
-        to:"fb0aBpdpTC2hUX9qC3V5H7:APA91bFUi8xgBA-EWfIe1c9BSBQz-op42pD0AKQDp5sA84HKLjPfJ8Ma66YkPsDuhzI08UkMSH6qX0SIrmnTpT2To4DEa9zKV2tAAtb_olBfqdSXVoc7oGOf0i_cHTPUwumhzpNKxd40",
-        notification:{
-            "title":"Mashui",
-            "body":"hola master",
-            "sound":"default",
-            "tag":"sms"
-        },
-        data:{}
+    var message = {
+    data: {
+        score: '850',
+        time: '2:45'
+    },
+    token: registrationToken
+    };
+
+    // Send a message to the device corresponding to the provided
+    // registration token.
+    admin.messaging().send(message)
+    .then((response) => {
+        // Response is a message ID string.
+        console.log('Successfully sent message:', response);
     })
+    .catch((error) => {
+        console.log('Error sending message:', error);
+      });
+
+
 }

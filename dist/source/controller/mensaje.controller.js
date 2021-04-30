@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.notify = exports.deleteMensaje = exports.putMensaje = exports.postMensaje = exports.getMensaje = exports.getLastMensajeInbox = exports.getAllMensajeInbox = exports.getAllMensaje = void 0;
+const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const mensaje_model_1 = __importDefault(require("../models/mensaje.model"));
 const getAllMensaje = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const mensajees = yield mensaje_model_1.default.findAll();
@@ -124,16 +125,24 @@ const deleteMensaje = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.deleteMensaje = deleteMensaje;
 const notify = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.setHeader("Authorization", "key=	AAAA1Z1jYms:APA91bG8TH68WVTx30xFOHTsRrRwRDUj2rida7RxNUuQfDa7TML7OLHtnDriXMawKYAnnFxLxWbbnqczWWjEsmhmwQII4g-Stb5tL12hTdrPXd7WE-Kb52da2fsHoMNWaSuIeLr91GYs");
-    res.json({
-        to: "fb0aBpdpTC2hUX9qC3V5H7:APA91bFUi8xgBA-EWfIe1c9BSBQz-op42pD0AKQDp5sA84HKLjPfJ8Ma66YkPsDuhzI08UkMSH6qX0SIrmnTpT2To4DEa9zKV2tAAtb_olBfqdSXVoc7oGOf0i_cHTPUwumhzpNKxd40",
-        notification: {
-            "title": "Mashui",
-            "body": "hola master",
-            "sound": "default",
-            "tag": "sms"
+    // This registration token comes from the client FCM SDKs.
+    var registrationToken = 'fb0aBpdpTC2hUX9qC3V5H7:APA91bFUi8xgBA-EWfIe1c9BSBQz-op42pD0AKQDp5sA84HKLjPfJ8Ma66YkPsDuhzI08UkMSH6qX0SIrmnTpT2To4DEa9zKV2tAAtb_olBfqdSXVoc7oGOf0i_cHTPUwumhzpNKxd40';
+    var message = {
+        data: {
+            score: '850',
+            time: '2:45'
         },
-        data: {}
+        token: registrationToken
+    };
+    // Send a message to the device corresponding to the provided
+    // registration token.
+    firebase_admin_1.default.messaging().send(message)
+        .then((response) => {
+        // Response is a message ID string.
+        console.log('Successfully sent message:', response);
+    })
+        .catch((error) => {
+        console.log('Error sending message:', error);
     });
 });
 exports.notify = notify;
