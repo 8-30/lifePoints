@@ -43,22 +43,24 @@ export const postEmpleado = async ( req: Request, res: Response ) =>{
     try {
         ///const administrador = Administrador.create(body);
         //para guardar peromero los datos de persona persona
-        const {contrasenia} = body;
+        const {persona} = body;
         const saltRaunds = 10;
-        const passwordHash =await brypt.hash(contrasenia,saltRaunds);
-        const persona =new Persona(body);
-        persona.contrasenia = passwordHash;
-        await persona.save();
+        const passwordHash =await brypt.hash(persona.contrasenia,saltRaunds);
+        const newpersona =new Persona(persona);
+        newpersona.contrasenia = passwordHash;
+        await newpersona.save();
         // creamos empleado y asignamos el id de persona guardado anteriormente
         const empleado = new Empleado(body);
-        empleado.setDataValue("idEmpleado", persona.idPersona)
+        empleado.setDataValue("idEmpleado", newpersona.idPersona)
         empleado.save();
         res.json({
             empleado,
             persona
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({
+            
             msg:'Hable con el administrador',
         });
     }

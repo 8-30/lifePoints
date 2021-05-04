@@ -50,15 +50,15 @@ const postEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         ///const administrador = Administrador.create(body);
         //para guardar peromero los datos de persona persona
-        const { contrasenia } = body;
+        const { persona } = body;
         const saltRaunds = 10;
-        const passwordHash = yield bcrypt_1.default.hash(contrasenia, saltRaunds);
-        const persona = new persona_model_1.default(body);
-        persona.contrasenia = passwordHash;
-        yield persona.save();
+        const passwordHash = yield bcrypt_1.default.hash(persona.contrasenia, saltRaunds);
+        const newpersona = new persona_model_1.default(persona);
+        newpersona.contrasenia = passwordHash;
+        yield newpersona.save();
         // creamos empleado y asignamos el id de persona guardado anteriormente
         const empleado = new empleado_models_1.default(body);
-        empleado.setDataValue("idEmpleado", persona.idPersona);
+        empleado.setDataValue("idEmpleado", newpersona.idPersona);
         empleado.save();
         res.json({
             empleado,
@@ -66,6 +66,7 @@ const postEmpleado = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({
             msg: 'Hable con el administrador',
         });
